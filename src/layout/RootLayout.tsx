@@ -279,7 +279,7 @@ export const RootLayout = () => {
           <div className="text-2xl pb-3 border-b border-[#1f67677c] w-full">
             Dashboard
           </div>
-          <Eerth className="svg-file absolute object-contain w-full  z-[-1] left-0 right-0 top-16 bottom-0 m-auto" />
+          <Eerth className="svg-file absolute object-cover w-full h-full z-[-1] left-0 right-0 top-16 bottom-0 m-auto" />
           <Outlet />
         </main>
       </div>

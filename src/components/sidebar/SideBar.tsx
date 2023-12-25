@@ -31,7 +31,7 @@ export function Sidebar({ children }: SidebarProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <aside className="flex-shrink-0 sticky h-screen  top-0 bottom-0 z-10">
+    <aside className="flex-shrink-0 sticky h-screen  top-0 bottom-0 z-10 ">
       <nav className="h-full flex flex-col bg-[var(--bgsidebar)] shadow-sm float-right">
         <div className="p-4 pb-2 flex justify-between items-center mb-6">
           <Logo open={expanded} />
@@ -88,7 +88,7 @@ export function SidebarItem({ icon, text, alert }: SidebarItem) {
         transition-colors group
         ${
           isActive
-            ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
+            ? "bg-gradient-to-tr from-indigo-200 to-[#51FFFEFF] text-indigo-800"
             : "hover:bg-indigo-50 text-gray-600"
         }
     `;
