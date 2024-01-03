@@ -3,31 +3,35 @@
 @tailwind utilities;
 
 :root {
-  --bgbody: #f4f5f7;
-  --clbody: rgb(3, 18, 37);
-  --bgsidebar: #fff;
-  --bgcard: #fff;
-  --bgcardhead: #fff;
-  --sidebarline: #060505;
-  --cardtext: rgb(3, 18, 37);
-  --buttonsidbar: #f7fafc;
-  --layoutline: #d3dcffff;
-}
-
-// * {
-//   transition: background 0.4s;
-// }
-
-.dark {
   --bgbody: rgb(3, 18, 37);
   --bgsidebar: #111827ff;
   --clbody: white;
   --bgcard: #020e1de2;
+  --bghoverdropdown: #020e1de2;
   --bgcardhead: #010812ff;
   --sidebarline: #212121;
   --cardtext: rgb(168, 168, 168);
   --buttonsidbar: #6b7280;
   --layoutline: #1f67677c;
+  --statisticscolor: #51fffeff;
+}
+
+* {
+  transition: background 0.4s;
+}
+
+.light {
+  --bgbody: #f4f5f7;
+  --clbody: rgb(3, 18, 37);
+  --bgsidebar: #fff;
+  --bgcard: #fff;
+  --bghoverdropdown: #f1f1f1;
+  --bgcardhead: #fff;
+  --sidebarline: #060505;
+  --cardtext: rgb(3, 18, 37);
+  --buttonsidbar: #f7fafc;
+  --layoutline: #d3dcffff;
+  --statisticscolor: #058197;
 }
 
 body {
@@ -64,4 +68,38 @@ body {
     --buttonsidbar: #6b7280;
     --layoutline: #1f67677c;
   }
+}
+
+:where(.css-dev-only-do-not-override-2rgkd4).ant-radio-button-wrapper {
+  background: transparent;
+  border-color: #667eea !important;
+}
+:where(
+    .css-dev-only-do-not-override-2rgkd4
+  ).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  border-color: #667eea !important;
+  background: #667eea;
+}
+:where(.css-dev-only-do-not-override-2rgkd4).ant-radio-button-wrapper:not(
+    :first-child
+  )::before {
+  display: none;
+}
+
+.ant-form-item-row {
+  display: block !important;
+}
+.ant-form-item-label {
+  text-align: start !important;
+  margin-bottom: 5px;
+}
+:where(.css-dev-only-do-not-override-2rgkd4).ant-input {
+  padding-top: 8px !important;
+  border-radius: 12px !important;
+  padding-bottom: 8px !important;
+}
+:where(.css-dev-only-do-not-override-2rgkd4).ant-input-affix-wrapper {
+  padding-top: 0px !important;
+  border-radius: 12px !important;
+  padding-bottom: 0px !important;
 }

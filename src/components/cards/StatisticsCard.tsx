@@ -1,4 +1,5 @@
 import { Progress } from "antd";
+import CountUp from "react-countup";
 
 const progress = [
   {
@@ -39,20 +40,22 @@ const data = [
 export const StatisticsCard = () => {
   return (
     <div className="card-cell px-5 py-2 w-full">
-      <h2 className="text-[#51FFFEFF] text-2xl">Charges Today</h2>
+      <h2 className="text-[var(--statisticscolor)] text-2xl">Charges Today</h2>
 
-      <div className="py-1 font-bold px-8 pb-2 text-4xl text-[#51FFFEFF] inline-block mt-2 border border-[#51ffff20]">
-        25,830
+      <div className="py-1 font-bold px-8 pb-2 text-4xl text-[var(--statisticscolor)] inline-block mt-2 border border-[#51ffff20]">
+        <CountUp end={252830} separator="," decimal="," />
       </div>
 
-      <div className="flex justify-between gap-24 mt-4">
+      <div className="flex justify-between  mt-4">
         <div className="w-full max-w-[240px] flex-shrink-0 text-xs text-[var(--cardtext)]">
           {progress.map((item, index) => {
             return (
               <div className="flex flex-col gap-1 mt-1" key={index}>
                 <div className="flex items-center justify-between">
                   <h3>{item.title}</h3>
-                  <p>{item.amout}</p>
+                  <p className="w-9">
+                    <CountUp end={+item.amout} separator=" " decimal="," />
+                  </p>
                 </div>
                 <Progress
                   size={"small"}
@@ -69,32 +72,32 @@ export const StatisticsCard = () => {
             );
           })}
         </div>
+        {data.map((item, index) => {
+          return (
+            <li className="flex flex-col gap-3" key={index}>
+              <div className="flex flex-col gap-1">
+                <p className="text-[var(--statisticscolor)] w-16 text-2xl">
+                  <CountUp end={+item.amount} separator=" " decimal="," />
+                </p>
+                <span
+                  className={`text-xs ${
+                    item.status ? "text-green" : "text-red-500"
+                  }`}
+                >
+                  <i
+                    className={`fa-solid fa-arrow-${
+                      item.status ? "up" : "down"
+                    } mr-1`}
+                  ></i>
+                  {item.percent}%
+                </span>
+              </div>
 
-        <ul className="flex justify-between flex-1">
-          {data.map((item, index) => {
-            return (
-              <li className="flex flex-col gap-3" key={index}>
-                <div className="flex flex-col gap-1">
-                  <p className="text-[#51FFFEFF] text-2xl">{item.amount}</p>
-                  <span
-                    className={`text-xs ${
-                      item.status ? "text-green" : "text-red-500"
-                    }`}
-                  >
-                    <i
-                      className={`fa-solid fa-arrow-${
-                        item.status ? "up" : "down"
-                      } mr-1`}
-                    ></i>
-                    {item.percent}%
-                  </span>
-                </div>
-
-                <div className="text-[var(--cardtext)]">{item.title}</div>
-              </li>
-            );
-          })}
-        </ul>
+              <div className="text-[var(--cardtext)]">{item.title}</div>
+            </li>
+          );
+        })}
+        {/* <ul className="flex justify-between flex-1"></ul> */}
         {/* 
         <div>
           <div></div>

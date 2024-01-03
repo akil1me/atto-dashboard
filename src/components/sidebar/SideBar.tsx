@@ -1,11 +1,9 @@
-import { Switch } from "antd";
+import { Button } from "antd";
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Logo } from "..";
-import { RootLayoutContext } from "../../layout";
-
-const SidebarContext = createContext<{ expanded: boolean }>({ expanded: true });
+import { DashboardContext } from "../../layout";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -18,23 +16,21 @@ interface SidebarItem {
 }
 
 export function Sidebar({ children }: SidebarProps) {
-  const { dark, setDark } = useContext(RootLayoutContext);
+  const { dark, expanded, setExpanded } = useContext(DashboardContext);
 
   useEffect(() => {
-    if (dark) {
-      document.body.classList.add("dark");
+    if (!dark) {
+      document.body.classList.add("light");
     } else {
-      document.body.classList.remove("dark");
+      document.body.classList.remove("light");
     }
   }, [dark]);
 
-  const [expanded, setExpanded] = useState(false);
-
   return (
-    <aside className="flex-shrink-0 sticky h-screen  top-0 bottom-0 z-10 ">
+    <aside className="flex-shrink-0 fixed left-0 top-0 bottom-0 z-10 ">
       <nav className="h-full flex flex-col bg-[var(--bgsidebar)] shadow-sm float-right">
         <div className="p-4 pb-2 flex justify-between items-center mb-6">
-          <Logo open={expanded} />
+          <Logo open={expanded} dark={dark} />
           <button
             onClick={() => setExpanded((curr) => !curr)}
             className="p-1.5 rounded-lg bg-[var(--buttonsidbar)] hover:bg-gray-400"
@@ -43,19 +39,14 @@ export function Sidebar({ children }: SidebarProps) {
           </button>
         </div>
 
-        <SidebarContext.Provider value={{ expanded }}>
-          <div className="flex-1 h-full  px-3">{children}</div>
-        </SidebarContext.Provider>
+        <div className="flex-1 h-full  px-3">{children}</div>
 
         <div className="border-t border-[var(--sidebarline)] flex py-4 px-3">
-          <Switch
-            value={dark}
-            checkedChildren={<i className="fa-solid fa-moon"></i>}
-            unCheckedChildren={
-              <i className="fa-solid fa-sun text-yellow-300"></i>
+          <Button
+            className=""
+            icon={
+              <i className="text-[var(--cardtext)] fa fa-solid fa-right-from-bracket"></i>
             }
-            onChange={(e) => setDark(e)}
-            defaultChecked
           />
           <div
             className={`
@@ -75,7 +66,7 @@ export function Sidebar({ children }: SidebarProps) {
 }
 
 export function SidebarItem({ icon, text, alert }: SidebarItem) {
-  const { expanded } = useContext(SidebarContext);
+  const { expanded } = useContext(DashboardContext);
 
   return (
     <NavLink

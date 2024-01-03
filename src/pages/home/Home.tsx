@@ -25,8 +25,8 @@ const lineData = [
 
 export const Home = () => {
   return (
-    <div className="mt-5 flex justify-between gap-7">
-      <div className="flex flex-col flex-1 gap-7">
+    <div className="mt-5 flex justify-between flex-wrap gap-7">
+      <div className="flex flex-col flex-1 gap-7 min-w-[300px]  max-w-[700px] mx-auto lg:max-w-[900px]">
         <Card />
         <ChartsCard
           title="Metro lines"
@@ -55,7 +55,9 @@ export const Home = () => {
                 splitLine: {
                   show: false,
                 },
-                data: lineData.map((line) => line.value),
+                data: lineData.map((line) => {
+                  return line.value.toLocaleString("ru");
+                }),
               },
             ],
             xAxis: {
@@ -64,8 +66,23 @@ export const Home = () => {
               },
               show: false,
             },
+
             series: [
               {
+                animationDelay(idx) {
+                  return +((idx + 1).toString() + "00");
+                },
+                emphasis: {
+                  itemStyle: {
+                    shadowBlur: 101,
+                    opacity: 0.7,
+                    decal: "none",
+                    borderCap: "square",
+                  },
+                  // focus: "self",
+                },
+
+                animationEasing: "bounceOut",
                 showBackground: true,
                 backgroundStyle: {
                   color: "#c9c9c99d",
@@ -89,8 +106,18 @@ export const Home = () => {
         <ChartsCard
           title="Bearth turnover"
           option={{
+            tooltip: {
+              transitionDuration: 1.5,
+            },
             series: [
               {
+                animationDelay(idx) {
+                  return +((idx + 1).toString() + "00");
+                },
+                animationEasing: "bounceOut",
+                emphasis: {
+                  focus: "self",
+                },
                 data: [4, 4.5, 2.8, 3.6, 3.8],
                 type: "bar",
                 label: {
@@ -108,23 +135,36 @@ export const Home = () => {
           }}
         />
       </div>
-      <div className="flex flex-col  items-stretch flex-auto gap-7">
+      <div className="flex flex-col -order-1 lg:order-[0] items-stretch min-w-[500px]  md:flex-auto gap-7">
         <StatisticsCard />
-        <div className="h-full">
+        <div className="h-full min-h-[400px]">
           <Map />
         </div>
       </div>
 
-      <div className="flex flex-col flex-1  gap-7">
+      <div className="flex flex-col flex-1 min-w-[300px] max-w-[700px] mx-auto gap-7">
         <ChartsCard title="Parking statistics" />
         <ChartsCard
           title="Metro and Bus"
           option={{
+            tooltip: {
+              trigger: "axis",
+              showContent: true,
+              transitionDuration: 1.5,
+            },
+            grid: {
+              left: "3%",
+              right: "4%",
+              bottom: "15%",
+              top: "20%",
+              containLabel: true,
+            },
             legend: {
               data: ["Bus", "Metro"],
               textStyle: {
                 color: "#959595",
               },
+
               orient: "horizontal",
               right: 0,
               top: 0,
@@ -144,17 +184,33 @@ export const Home = () => {
                 show: false,
               },
             },
+
             series: [
               {
+                markPoint: {
+                  data: [{ type: "max", name: "Max" }],
+                },
+
                 name: "Bus",
                 type: "line",
-
-                data: [100, 132, 101, 134, 90, 230, 210],
+                symbol: "circle",
+                animationEasing: "quadraticIn",
+                data: [100, 132, 101, 134, 90, 300, 210],
+                emphasis: {
+                  focus: "self",
+                },
               },
               {
                 name: "Metro",
                 type: "line",
-
+                symbol: "circle",
+                animationEasing: "quadraticIn",
+                markPoint: {
+                  data: [{ type: "max", name: "Max" }],
+                },
+                emphasis: {
+                  focus: "self",
+                },
                 data: [120, 122, 211, 13, 100, 230, 410],
               },
             ],
@@ -183,21 +239,18 @@ export const Home = () => {
             series: [
               {
                 name: "Access From",
-                center: ["70%", "45%"],
+                center: ["70%", "40%"],
                 type: "pie",
-                radius: ["30%", "50%"],
+                radius: ["25%", "40%"],
                 label: {
                   color: "",
                 },
-                itemStyle: {
-                  borderRadius: 4,
-                },
                 data: [
-                  { value: 1048, name: "Search Engine" },
-                  { value: 735, name: "Direct" },
-                  { value: 580, name: "Email" },
-                  { value: 484, name: "Union Ads" },
-                  { value: 300, name: "Video Ads" },
+                  { value: 1048, name: "Uzcard" },
+                  { value: 735, name: "Humo" },
+                  { value: 580, name: "Transport" },
+                  { value: 484, name: "Virtual card" },
+                  { value: 300, name: "Cash" },
                 ],
 
                 emphasis: {
