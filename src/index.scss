@@ -103,3 +103,18 @@ body {
   border-radius: 12px !important;
   padding-bottom: 0px !important;
 }
+:where(.css-dev-only-do-not-override-2rgkd4).ant-tabs .ant-tabs-tab-btn {
+  color: var(--clbody);
+}
+.ant-tabs-nav::before {
+  border-bottom: none !important;
+}
+:where(.css-dev-only-do-not-override-2rgkd4).ant-tabs .ant-tabs-ink-bar {
+  background: var(--statisticscolor);
+}
+
+:where(.css-dev-only-do-not-override-2rgkd4).ant-tabs
+  .ant-tabs-tab.ant-tabs-tab-active
+  .ant-tabs-tab-btn {
+  color: var(--statisticscolor);
+}

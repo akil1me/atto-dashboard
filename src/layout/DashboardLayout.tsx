@@ -1,6 +1,7 @@
 import {
   BarChart3,
   Boxes,
+  Bus,
   LayoutDashboard,
   Package,
   Repeat,
@@ -12,6 +13,7 @@ import Eerth from "../assets/earth.svg?react";
 import { Logo, Sidebar, SidebarItem } from "../components";
 import StaggeredDropDown from "../components/dropdown/Dropdown";
 import "./RootLayout.scss";
+import { Switch } from "antd";
 
 const getMode = (): boolean =>
   JSON.parse(localStorage.getItem("light") || "true");
@@ -46,9 +48,10 @@ export const DashboardLayout = () => {
         <Sidebar>
           <SidebarItem
             icon={<LayoutDashboard size={20} strokeWidth={1} />}
-            text="Dashboard"
+            text="Main"
             alert
           />
+          <SidebarItem icon={<Bus size={20} strokeWidth={1} />} text="Trips" />
 
           <SidebarItem
             icon={<BarChart3 size={20} strokeWidth={1} />}
@@ -87,7 +90,19 @@ export const DashboardLayout = () => {
               <h1> Dashboard</h1>
             </div>
 
-            <StaggeredDropDown />
+            <div className="flex items-center gap-3">
+              <Switch
+                size="small"
+                value={dark}
+                checkedChildren={<i className="fa-solid fa-moon"></i>}
+                unCheckedChildren={
+                  <i className="fa-solid fa-sun text-yellow-300"></i>
+                }
+                onChange={(e) => setDark(e)}
+                defaultChecked
+              />
+              <StaggeredDropDown />
+            </div>
             {/* <div className="flex items-center gap-4">
               <Switch
                 value={dark}

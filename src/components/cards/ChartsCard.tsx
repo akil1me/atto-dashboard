@@ -3,10 +3,12 @@ import ReactEcharts from "echarts-for-react";
 import * as echarts from "echarts";
 
 import "./Card.scss";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
+import { DashboardContext } from "../../layout";
 interface ChartsCardProps {
   option?: echarts.EChartsOption;
   title: string;
+  height?: string | number;
 }
 
 const defaultOptions: echarts.EChartsOption = {
@@ -59,9 +61,13 @@ const defaultOptions: echarts.EChartsOption = {
   ],
 };
 
-export const ChartsCard: React.FC<ChartsCardProps> = ({ option, title }) => {
+export const ChartsCard: React.FC<ChartsCardProps> = ({
+  option,
+  title,
+  height = "100%",
+}) => {
   const chartRef = useRef<ReactEcharts | null>(null);
-
+  const { dark } = useContext(DashboardContext);
   const handleWindowResize = () => {
     if (chartRef.current) {
       // Trigger ECharts resize method
@@ -85,11 +91,12 @@ export const ChartsCard: React.FC<ChartsCardProps> = ({ option, title }) => {
     <div className="card-cell min-h-[260px] w-full">
       <ChartHead title={title} color="bg-green" />
       <ReactEcharts
+        theme={dark ? "dark" : ""}
         ref={chartRef}
         echarts={echarts}
-        option={{ ...defaultOptions, ...option }}
+        option={{ backgroundColor: "", ...defaultOptions, ...option }}
         className="[&_div]:!w-auto [&_div]:!h-auto"
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%", height: height }}
         // onEvents={onEvents}
       />
     </div>

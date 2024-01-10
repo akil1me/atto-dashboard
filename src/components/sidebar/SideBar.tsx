@@ -2,8 +2,10 @@ import { Button } from "antd";
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { Logo } from "..";
+import { Logo } from "../logo/Logo";
 import { DashboardContext } from "../../layout";
+import { useAppDispatch } from "../../redux";
+import { loginActions } from "../../redux/login.slice";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -17,7 +19,7 @@ interface SidebarItem {
 
 export function Sidebar({ children }: SidebarProps) {
   const { dark, expanded, setExpanded } = useContext(DashboardContext);
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (!dark) {
       document.body.classList.add("light");
@@ -25,6 +27,10 @@ export function Sidebar({ children }: SidebarProps) {
       document.body.classList.remove("light");
     }
   }, [dark]);
+
+  const handleLogout = () => {
+    dispatch(loginActions.setToken(null));
+  };
 
   return (
     <aside className="flex-shrink-0 fixed left-0 top-0 bottom-0 z-10 ">
@@ -43,7 +49,7 @@ export function Sidebar({ children }: SidebarProps) {
 
         <div className="border-t border-[var(--sidebarline)] flex py-4 px-3">
           <Button
-            className=""
+            onClick={handleLogout}
             icon={
               <i className="text-[var(--cardtext)] fa fa-solid fa-right-from-bracket"></i>
             }
@@ -79,7 +85,7 @@ export function SidebarItem({ icon, text, alert }: SidebarItem) {
         transition-colors group
         ${
           isActive
-            ? "bg-gradient-to-tr from-indigo-200 to-[#51FFFEFF] text-indigo-800"
+            ? "bg-gradient-to-tr from-indigo-200 to-[#4df4f4] text-indigo-800"
             : "hover:bg-indigo-50 text-gray-600"
         }
     `;
