@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { axiosInstans } from "../../api";
 import { useAppDispatch } from "../../redux";
 import { loginActions } from "../../redux/login.slice";
+import { uid } from "uid";
 
 interface LoginValues {
   username: string;
@@ -29,7 +30,7 @@ export const Login = () => {
     {},
     {
       params: {
-        token: "Token",
+        token: uid(),
       },
     }
   );
@@ -65,81 +66,83 @@ export const Login = () => {
       <div className="bg-white w-[45%]  h-screen px-10 py-12">
         <Logo open dark={false} />
 
-        <div className="pl-8 mt-12 max-w-lg">
-          <h1 className="text-5xl font-bold">Sign in</h1>
+        <div className="pl-8 mt-12  flex flex-col items-center">
+          <div className="w-full max-w-lg">
+            <h1 className="text-5xl font-bold">Sign in</h1>
 
-          <Form className="mt-10" onFinish={onFinish}>
-            <Form.Item
-              label={"User Name"}
-              name={"username"}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              className="mt-6"
-              label={"Password"}
-              name={"password"}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
-
-            <div className="flex items-center gap-2">
-              {captcha && !isFetchingCaptcha ? (
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: captcha,
-                  }}
-                ></div>
-              ) : (
-                <Skeleton.Button
-                  style={{
-                    width: 150,
-                    height: 50,
-                  }}
-                  active
-                />
-              )}
-
+            <Form className="mt-10 w-full" onFinish={onFinish}>
               <Form.Item
-                name={"capcha"}
-                className="mb-0 w-full"
+                label={"User Name"}
+                name={"username"}
                 rules={[
                   {
                     required: true,
                   },
                 ]}
               >
-                <Input
-                  suffix={
-                    <Button
-                      onClick={onClickRetry}
-                      className="-mr-1 rounded-xl border-none h-auto"
-                      icon={<TfiReload />}
-                    />
-                  }
-                />
+                <Input />
               </Form.Item>
-            </div>
 
-            <Button
-              loading={isPending}
-              className="h-auto w-full py-[8px] bg-[#1F2A66FF] text-white rounded-xl mt-10"
-              htmlType="submit"
-            >
-              Sign in
-            </Button>
-          </Form>
+              <Form.Item
+                className="mt-6"
+                label={"Password"}
+                name={"password"}
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
+
+              <div className="flex items-center gap-2">
+                {captcha && !isFetchingCaptcha ? (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: captcha,
+                    }}
+                  ></div>
+                ) : (
+                  <Skeleton.Button
+                    style={{
+                      width: 150,
+                      height: 50,
+                    }}
+                    active
+                  />
+                )}
+
+                <Form.Item
+                  name={"capcha"}
+                  className="mb-0 w-full"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input
+                    suffix={
+                      <Button
+                        onClick={onClickRetry}
+                        className="-mr-1 rounded-xl border-none h-auto"
+                        icon={<TfiReload />}
+                      />
+                    }
+                  />
+                </Form.Item>
+              </div>
+
+              <Button
+                loading={isPending}
+                className="h-auto w-full py-[8px] bg-[#1F2A66FF] text-white rounded-xl mt-10"
+                htmlType="submit"
+              >
+                Sign in
+              </Button>
+            </Form>
+          </div>
         </div>
       </div>
       <div className="bg-[#1F2A66FF] w-[55%]  h-screen"></div>

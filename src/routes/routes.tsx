@@ -5,6 +5,9 @@ import Metro from "../pages/metro";
 import NotFound from "../pages/not-found";
 import Login from "../pages/login";
 import Trips from "../pages/trips";
+import Tariffs from "../pages/tariffs";
+import CardBin from "../pages/card-bin";
+import StatisticsMetro from "../pages/statistics-metro";
 
 export const routes = createBrowserRouter([
   {
@@ -35,6 +38,27 @@ export const routes = createBrowserRouter([
           {
             path: "trips",
             element: <Trips />,
+          },
+          {
+            path: "tariffs",
+            element: <Tariffs />,
+          },
+          {
+            path: "bins",
+            element: <CardBin />,
+          },
+          {
+            path: "statistics",
+            children: [
+              {
+                index: true,
+                element: <Navigate to={"metro"} />,
+              },
+              {
+                path: "metro",
+                element: <StatisticsMetro />,
+              },
+            ],
           },
           {
             path: "*",

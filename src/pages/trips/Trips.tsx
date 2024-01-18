@@ -1,120 +1,49 @@
-import { Tabs } from "antd";
-import type { ColumnsType, TableProps } from "antd/es/table";
+import { Segmented, Tabs } from "antd";
+import dayjs from "dayjs";
+import dayjsRandom from "dayjs-random";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 import { AlignCenter, BusFront, TrainFrontTunnel } from "lucide-react";
-import { useContext } from "react";
-import { BsCashCoin, BsCreditCard2Back } from "react-icons/bs";
-import { PiDatabaseLight } from "react-icons/pi";
-import { TbLetterH, TbLetterU } from "react-icons/tb";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useGetData } from "../../hooks";
 import { DashboardContext } from "../../layout";
+import durtion from "dayjs/plugin/duration";
+dayjs.extend(dayjsRandom);
+dayjs.extend(durtion);
+// console.log();
 
 interface DataType {
-  key: React.Key;
-  name: string | React.ReactNode;
-  chinese: number;
-  math: number;
+  product?: string;
+  Total?: number;
+  Tariffs: number;
+  Qr: number;
+  "Transport cards": number;
+  "Bank cards": number;
+  "Virtual cards": number;
+  Privilege: number;
+  Aggregator: number;
+  "By cash": number;
 }
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: "Type of payment",
-    dataIndex: "name",
-  },
-  {
-    title: "Pass count",
-    dataIndex: "chinese",
-    sorter: {
-      compare: (a, b) => a.chinese - b.chinese,
-      multiple: 3,
-    },
-  },
-  {
-    title: "Total amount ",
-    dataIndex: "math",
-    sorter: {
-      compare: (a, b) => a.math - b.math,
-      multiple: 2,
-    },
-  },
-];
+type DataTypePie =
+  | "product"
+  | "Tariffs"
+  | "Qr"
+  | "Transport cards"
+  | "Bank cards"
+  | "Virtual cards"
+  | "Privilege"
+  | "Aggregator"
+  | "By cash";
 
-const data: DataType[] = [
-  {
-    key: "1",
-    name: (
-      <div className="flex items-center gap-3">
-        <BsCreditCard2Back />
-        <span>Transport card</span>
-      </div>
-    ),
-    chinese: 98,
-    math: 60,
-  },
-  {
-    key: "2",
-    name: (
-      <div className="flex items-center gap-3">
-        <TbLetterU />
-        <span>Uzcard</span>
-      </div>
-    ),
-    chinese: 98,
-    math: 66,
-  },
-  {
-    key: "3",
-    name: (
-      <div className="flex items-center gap-3">
-        <TbLetterH />
-        <span>Humo</span>
-      </div>
-    ),
-    chinese: 98,
-    math: 90,
-  },
-  {
-    key: "4",
-    name: (
-      <div className="flex items-center gap-3">
-        <BsCashCoin />
-        <span>Cash</span>
-      </div>
-    ),
-    chinese: 98,
-    math: 90,
-  },
-  {
-    key: "5",
-    name: (
-      <div className="flex items-center gap-3">
-        <PiDatabaseLight />
-        <span>Total</span>
-      </div>
-    ),
-    chinese: 88,
-    math: 99,
-  },
-];
-
-const onChange: TableProps<DataType>["onChange"] = (
-  pagination,
-  filters,
-  sorter,
-  extra
-) => {
-  console.log("params", pagination, filters, sorter, extra);
-};
+// interface DataType {
+//   key: React.Key;
+//   name: string | React.ReactNode;
+//   chinese: number;
+//   math: number;
+// }
 
 const items = [
-  {
-    text: "All",
-    icon: (
-      <div className="inline-block align-top">
-        <AlignCenter />
-      </div>
-    ),
-  },
   {
     text: "Metro",
     icon: (
@@ -133,32 +62,160 @@ const items = [
   },
 ];
 
-export const Trips = () => {
-  const { dark } = useContext(DashboardContext);
-  return (
-    <div className="mt-6 px-4">
-      <Tabs
-        className="mb-4"
-        size="large"
-        defaultActiveKey="1"
-        type="line"
-        items={items.map((item, i) => {
-          const id = String(i + 1);
-          return {
-            key: id,
-            label: item.text,
+export const tripsDataJson = {};
+// const echartsRef = useRef();
 
-            icon: item.icon,
-          };
-        })}
-      />
+const getHours = () => {
+  const result = [];
+  for (let i = 0; i < 24; i++) {
+    result.push(i + ":00"); // Put loop counter into array with "00" next to it
+  }
+
+  return result;
+};
+
+const dateDay: DataType[] = getHours().map((hour) => {
+  return {
+    product: hour,
+    Tariffs: Math.floor(Math.random() * 100),
+    Qr: Math.floor(Math.random() * 100),
+    "Transport cards": Math.floor(Math.random() * 100),
+    "Bank cards": Math.floor(Math.random() * 300),
+    "Virtual cards": Math.floor(Math.random() * 100),
+    Privilege: Math.floor(Math.random() * 100),
+    Aggregator: Math.floor(Math.random() * 100),
+    "By cash": Math.floor(Math.random() * 100),
+  };
+});
+
+const getDays = () => {
+  const weekdaysArray = [];
+
+  for (let i = 1; i <= 7; i++) {
+    const dayName = dayjs()
+      .day(i % 7)
+      .format("ddd"); // Используем i % 7, чтобы циклически обходить дни недели
+    weekdaysArray.push(dayName);
+  }
+
+  return weekdaysArray;
+};
+
+// console.log(dataWeekly());
+
+const dataWeekly: DataType[] = getDays().map((day) => {
+  return {
+    product: day,
+    Tariffs: Math.floor(Math.random() * 1000),
+    Qr: Math.floor(Math.random() * 1000),
+    "Transport cards": Math.floor(Math.random() * 1000),
+    "Bank cards": Math.floor(Math.random() * 1500),
+    "Virtual cards": Math.floor(Math.random() * 1000),
+    Privilege: Math.floor(Math.random() * 1000),
+    Aggregator: Math.floor(Math.random() * 1000),
+    "By cash": Math.floor(Math.random() * 1000),
+  };
+});
+
+const lineData = [...dateDay].map((item) => {
+  const itemNums = Object.values(item).filter(
+    (item) => typeof item === "number"
+  );
+
+  let total = itemNums.reduce((acc, curr) => acc + curr, 0);
+
+  return { ...item, Total: total };
+});
+// console.log(fate);
+
+export const Trips = () => {
+  const echartsRef = useRef<ReactEcharts | null>(null);
+  const { dark } = useContext(DashboardContext);
+  const {} = useGetData("operator/dashboard/metro/stations", ["metro"]);
+  const [hour, setHour] = useState(6);
+  const [data, setData] = useState(dateDay);
+
+  const hanldeChange = (evt: unknown) => {
+    const index = evt as { dataIndex?: number };
+    if (index.dataIndex || index.dataIndex === 0) {
+      setHour(index.dataIndex);
+    }
+  };
+
+  useEffect(() => {
+    if (echartsRef.current) {
+      const chartInstance = echartsRef.current.getEchartsInstance();
+      chartInstance.on("updateAxisPointer", hanldeChange);
+
+      return () => {
+        chartInstance.off("updateAxisPointer", hanldeChange);
+      };
+    }
+  }, []);
+
+  const pieChartData = Object.keys(data[hour])
+    .slice(1)
+    .map((item) => {
+      return {
+        name: item,
+        value: data[hour][item as DataTypePie],
+      };
+    });
+
+  return (
+    <div className="mt-6 px-4 ">
+      <div className="flex justify-between items-center">
+        <Tabs
+          className="mb-4"
+          size="large"
+          defaultActiveKey="1"
+          type="line"
+          items={items.map((item, i) => {
+            const id = String(i + 1);
+            return {
+              key: id,
+              label: item.text,
+
+              icon: item.icon,
+            };
+          })}
+        />
+        <Segmented
+          options={[
+            {
+              label: "Daily",
+              value: "daily",
+            },
+            {
+              label: "Weekly",
+              value: "weekly",
+            },
+            {
+              label: "Monthly",
+              value: "monthly",
+              disabled: true,
+            },
+            {
+              label: "Yearly",
+              value: "yearly",
+              disabled: true,
+            },
+          ]}
+        />
+      </div>
 
       <ReactEcharts
+        ref={echartsRef}
         theme={dark ? "dark" : ""}
-        className="[&_div]:!w-auto [&_div]:!h-auto"
-        style={{ width: "100%", height: "700px" }}
+        className="[&_div]:!w-auto [&_div]:!h-auto mb-5"
+        style={{ width: "100%", height: "1000px" }}
         option={
           {
+            title: {
+              text: `Time ${hour}:00 - ${hour}:59`,
+              left: 0,
+              right: 0,
+            },
             backgroundColor: "",
 
             legend: {},
@@ -167,91 +224,74 @@ export const Trips = () => {
               showContent: true,
               transitionDuration: 1.5,
             },
+
+            toolbox: {
+              show: true,
+              feature: {
+                magicType: { show: true, type: ["line", "bar"] },
+                restore: { show: true },
+              },
+            },
+
             dataset: {
-              source: [
-                ["product", "2012", "2013", "2014", "2015", "2016", "2017"],
-                ["Total", 156.5, 182.1, 108.7, 100.1, 153.4, 185.1],
-                ["Transport card", 51.1, 51.4, 55.1, 53.3, 73.8, 68.7],
-                ["Uzcard", 40.1, 62.2, 69.5, 36.4, 45.2, 32.5],
-                ["Humo", 25.2, 37.1, 41.2, 18, 33.9, 49.1],
-                ["Сash", 35.2, 37.1, 61.2, 48, 63.9, 99.1],
-              ],
+              source: lineData,
             },
             xAxis: { type: "category", offset: 10, boundaryGap: false },
             yAxis: {
               type: "value",
               gridIndex: 0,
-
+              // max: 400,
               axisLine: {
                 show: true,
               },
             },
-            animationDuration: 4000,
             grid: { top: "50%", containLabel: true },
-            series: [
+            dataZoom: [
               {
-                type: "line",
-                smooth: true,
+                type: "slider",
+                show: true,
+                minSpan: 10,
+              },
+              {
+                show: true,
+                type: "inside",
+                minSpan: 10,
+              },
+            ],
 
-                seriesLayoutBy: "row",
-                emphasis: { focus: "series" },
-                symbol: "circle",
-                animationEasing: "quadraticIn",
-                markLine: {},
-                stack: "Total",
-                areaStyle: {},
-              },
-              {
-                type: "line",
-                smooth: true,
-                seriesLayoutBy: "row",
-                emphasis: { focus: "series" },
-                symbol: "circle",
-                animationEasing: "quadraticIn",
-                stack: "Total",
-                areaStyle: {},
-              },
-              {
-                type: "line",
-                smooth: true,
-                seriesLayoutBy: "row",
-                emphasis: { focus: "series" },
-                symbol: "circle",
-                animationEasing: "quadraticIn",
-                stack: "Total",
-                areaStyle: {},
-              },
-              {
-                type: "line",
-                smooth: true,
-                seriesLayoutBy: "row",
-                emphasis: { focus: "series" },
-                symbol: "circle",
-                animationEasing: "quadraticIn",
-                stack: "Total",
-                areaStyle: {},
-              },
-              {
-                type: "line",
-                smooth: true,
-                seriesLayoutBy: "row",
-                emphasis: { focus: "series" },
-                symbol: "circle",
-                animationEasing: "quadraticIn",
-                stack: "Total",
-                areaStyle: {},
-                label: {
-                  show: true,
-                  position: "top",
-                },
-              },
+            series: [
+              ...[...new Array(9)].map(() => {
+                return {
+                  type: "line",
+                  smooth: true,
+                  lineStyle: {
+                    width: 2,
+                  },
+
+                  seriesLayoutBy: "row",
+                  emphasis: {
+                    focus: "series",
+                    shadowColor: "rgba(0, 0, 0, 0.8)",
+                  },
+                  universalTransition: true,
+                  symbol: "circle",
+                  animationEasing: "quadraticIn",
+                  markLine: {},
+                  stack: "a",
+                  areaStyle: {
+                    opacity: 0.3,
+                    shadowColor: "red",
+                  },
+                };
+              }),
               {
                 type: "pie",
                 id: "pie",
+                // roseType: "radius",
 
+                // dataGroupId: 1,
                 center: ["50%", "25%"],
-                radius: ["20%", "30%"],
-
+                radius: [35, 130],
                 emphasis: {
                   label: {
                     show: true,
@@ -259,19 +299,26 @@ export const Trips = () => {
                     fontWeight: "bold",
                   },
                   focus: "self",
+                  shadowColor: "rgba(0, 0, 0, 0.8)",
                 },
+                selectedMode: "single",
                 itemStyle: {
-                  borderRadius: 5,
-                  borderColor: "#fff",
+                  borderRadius: 8,
+                  borderColor: "white",
+
                   borderWidth: 2,
+                  shadowColor: "red",
                 },
+                animationType: "scale",
+                animationEasing: "elasticOut",
+                animationDelay: function () {
+                  return Math.random() * 200;
+                },
+                data: pieChartData,
+                universalTransition: true,
+                animationDuration: 2000,
                 label: {
                   formatter: "{b}: {@2012} ({d}%)",
-                },
-                encode: {
-                  itemName: "product",
-                  value: "2012",
-                  tooltip: "2012",
                 },
               },
             ],
@@ -284,83 +331,137 @@ export const Trips = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Product name
+                Type of payment
               </th>
               <th scope="col" className="px-6 py-3">
-                Color
+                Paid count
               </th>
               <th scope="col" className="px-6 py-3">
-                Category
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Price
-              </th>
-              <th scope="col" className="px-6 py-3">
-                <span className="sr-only">Edit</span>
+                Paid sum
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                Apple MacBook Pro 17"
-              </th>
-              <td className="px-6 py-4">Silver</td>
-              <td className="px-6 py-4">Laptop</td>
-              <td className="px-6 py-4">$2999</td>
-              <td className="px-6 py-4 text-right">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+            {pieChartData.map((item) => {
+              return (
+                <tr
+                  key={item.name}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
-                  Edit
-                </a>
-              </td>
-            </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                Microsoft Surface Pro
-              </th>
-              <td className="px-6 py-4">White</td>
-              <td className="px-6 py-4">Laptop PC</td>
-              <td className="px-6 py-4">$1999</td>
-              <td className="px-6 py-4 text-right">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  Edit
-                </a>
-              </td>
-            </tr>
-            <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                Magic Mouse 2
-              </th>
-              <td className="px-6 py-4">Black</td>
-              <td className="px-6 py-4">Accessories</td>
-              <td className="px-6 py-4">$99</td>
-              <td className="px-6 py-4 text-right">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  Edit
-                </a>
-              </td>
-            </tr>
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {item.name}
+                  </th>
+                  <td className="px-6 py-4">{item.value}</td>
+                  <td className="px-6 py-4">
+                    {item.value && Math.floor(+item.value * 1700)}
+                    <span> sum</span>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
     </div>
   );
 };
+
+// series: [
+//   {
+//     type: "line",
+//     smooth: true,
+//     lineStyle: {
+//       width: 4,
+//     },
+//     seriesLayoutBy: "row",
+//     emphasis: { focus: "series" },
+//     symbol: "circle",
+//     animationEasing: "quadraticIn",
+//     markLine: {},
+//     datasetId: 1,
+//   },
+//   {
+//     type: "line",
+//     smooth: true,
+//     lineStyle: {
+//       width: 4,
+//     },
+//     seriesLayoutBy: "row",
+//     emphasis: { focus: "series" },
+//     symbol: "circle",
+//     animationEasing: "quadraticIn",
+//   },
+//   {
+//     type: "line",
+//     smooth: true,
+//     lineStyle: {
+//       width: 4,
+//     },
+//     seriesLayoutBy: "row",
+//     emphasis: { focus: "series" },
+//     symbol: "circle",
+
+//     animationEasing: "quadraticIn",
+//   },
+//   {
+//     type: "line",
+//     smooth: true,
+//     seriesLayoutBy: "row",
+//     emphasis: { focus: "series" },
+//     symbol: "circle",
+//     lineStyle: {
+//       width: 4,
+//     },
+
+//     animationEasing: "quadraticIn",
+//   },
+//   {
+//     type: "line",
+//     smooth: true,
+//     seriesLayoutBy: "row",
+//     lineStyle: {
+//       width: 4,
+//     },
+//     emphasis: { focus: "series" },
+//     symbol: "circle",
+//     animationEasing: "quadraticIn",
+//     // label: {
+//     //   show: true,
+//     //   position: "top",
+//     // },
+//   },
+//   {
+//     type: "pie",
+//     id: "pie",
+//     roseType: "area",
+//     dataGroupId: 1,
+//     center: ["50%", "25%"],
+//     radius: [35, 130],
+//     emphasis: {
+//       label: {
+//         show: true,
+//         fontSize: 24,
+//         fontWeight: "bold",
+//       },
+//       focus: "self",
+//     },
+//     itemStyle: {
+//       borderRadius: 8,
+//       borderColor: "#fff",
+//       borderWidth: 2,
+//     },
+//     animationType: "scale",
+//     animationDelay: function (idx: number) {
+//       if (idx) {
+//         return idx * 100;
+//       }
+//     },
+//     animationDuration: 2000,
+//     label: {
+//       formatter: "{b}: {@2012} ({d}%)",
+//     },
+//   },
+// ];

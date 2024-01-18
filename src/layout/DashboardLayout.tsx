@@ -1,19 +1,10 @@
-import {
-  BarChart3,
-  Boxes,
-  Bus,
-  LayoutDashboard,
-  Package,
-  Repeat,
-  UserCircle,
-} from "lucide-react";
+import { Switch } from "antd";
 import { Dispatch, createContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import Eerth from "../assets/earth.svg?react";
-import { Logo, Sidebar, SidebarItem } from "../components";
+import { Logo } from "../components";
 import StaggeredDropDown from "../components/dropdown/Dropdown";
+import SidebarTest from "../components/sidebar/SidebarTest";
 import "./RootLayout.scss";
-import { Switch } from "antd";
 
 const getMode = (): boolean =>
   JSON.parse(localStorage.getItem("light") || "true");
@@ -42,10 +33,19 @@ export const DashboardLayout = () => {
     localStorage.setItem("expanded", JSON.stringify(expanded));
   }, [dark, expanded]);
 
+  useEffect(() => {
+    if (!dark) {
+      document.body.classList.add("light");
+    } else {
+      document.body.classList.remove("light");
+    }
+  }, [dark]);
+
   return (
     <DashboardContext.Provider value={{ dark, setDark, setExpanded, expanded }}>
       <div className="flex">
-        <Sidebar>
+        <SidebarTest />
+        {/* <Sidebar>
           <SidebarItem
             icon={<LayoutDashboard size={20} strokeWidth={1} />}
             text="Main"
@@ -54,12 +54,16 @@ export const DashboardLayout = () => {
           <SidebarItem icon={<Bus size={20} strokeWidth={1} />} text="Trips" />
 
           <SidebarItem
-            icon={<BarChart3 size={20} strokeWidth={1} />}
-            text="Statistics"
+            icon={
+              <span className="text-xl">
+                <LiaMoneyCheckAltSolid />
+              </span>
+            }
+            text="Tariffs"
           />
           <SidebarItem
-            icon={<UserCircle size={20} strokeWidth={1} />}
-            text="Users"
+            icon={<CreditCard size={20} strokeWidth={1} />}
+            text="Bins"
           />
           <SidebarItem
             icon={<Boxes size={20} strokeWidth={1} />}
@@ -73,14 +77,14 @@ export const DashboardLayout = () => {
             icon={<Repeat size={20} strokeWidth={1} />}
             text="Billings"
           />
-        </Sidebar>
+        </Sidebar> */}
 
         <main
-          className={`my-4 transition-all duration-500 w-full relative ${
+          className={`mt-1 mb-4 transition-all duration-500 w-full relative ${
             expanded ? "ml-[18rem]" : "ml-[4.3rem]"
           }`}
         >
-          <div className="text-2xl pb-3 px-4 border-b border-[#1f67677c] flex items-center justify-between w-full sticky backdrop-blur top-0 z-40">
+          <div className="text-2xl pb-2 px-4 border-b border-[#1f67677c] flex items-center justify-between w-full sticky backdrop-blur top-0 z-40">
             <div
               className={`flex items-center  transition-all ${
                 expanded ? "gap-0" : "gap-4"
@@ -126,7 +130,6 @@ export const DashboardLayout = () => {
               </div>
             </div> */}
           </div>
-          <Eerth className="svg-file absolute object-cover w-full h-full z-[-1] left-0 right-0 top-16 bottom-0 m-auto" />
           <div className="mx-2">
             <Outlet />
           </div>

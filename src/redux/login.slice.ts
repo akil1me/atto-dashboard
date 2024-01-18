@@ -11,7 +11,7 @@ const getToken: string | null = JSON.parse(Cookies.get("token") || "null");
 const getLang: LanguageType = (Cookies.get("lang") as LanguageType) || "ru";
 
 const initialState: InitialStateType = {
-  token: getToken,
+  token: "token", //getToken,
   lang: getLang,
 };
 

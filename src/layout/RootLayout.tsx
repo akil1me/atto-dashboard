@@ -9,11 +9,11 @@ export const RootLayout = () => {
 
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    if (!token && !pathname.includes("login")) {
-      setUrl(pathname);
-    }
-  }, [pathname, token]);
+  // useEffect(() => {
+  //   if (!token && !pathname.includes("login")) {
+  //     setUrl(pathname);
+  //   }
+  // }, [pathname, token]);
 
   if (!token && !pathname.includes("login")) {
     return <Navigate to={"/login"} />;

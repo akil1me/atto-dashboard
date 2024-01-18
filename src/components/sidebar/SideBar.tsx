@@ -6,6 +6,7 @@ import { Logo } from "../logo/Logo";
 import { DashboardContext } from "../../layout";
 import { useAppDispatch } from "../../redux";
 import { loginActions } from "../../redux/login.slice";
+import { IoMdClose } from "react-icons/io";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -20,21 +21,19 @@ interface SidebarItem {
 export function Sidebar({ children }: SidebarProps) {
   const { dark, expanded, setExpanded } = useContext(DashboardContext);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (!dark) {
-      document.body.classList.add("light");
-    } else {
-      document.body.classList.remove("light");
-    }
-  }, [dark]);
 
   const handleLogout = () => {
     dispatch(loginActions.setToken(null));
   };
 
   return (
-    <aside className="flex-shrink-0 fixed left-0 top-0 bottom-0 z-10 ">
-      <nav className="h-full flex flex-col bg-[var(--bgsidebar)] shadow-sm float-right">
+    <aside className="flex-shrink-0 fixed left-0 top-0 bottom-0 z-50 ">
+      <nav className="h-full flex flex-col bg-[var(--bgsidebar)] shadow-sm float-right relative">
+        {/* <Button
+          className="absolute !h-auto -right-7 text-lg top-0 border-none shadow-none"
+          icon={<IoMdClose />}
+        ></Button> */}
+
         <div className="p-4 pb-2 flex justify-between items-center mb-6">
           <Logo open={expanded} dark={dark} />
           <button
