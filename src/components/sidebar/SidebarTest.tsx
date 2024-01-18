@@ -19,6 +19,8 @@ import { DashboardContext } from "../../layout";
 import { useAppDispatch } from "../../redux";
 import { loginActions } from "../../redux/login.slice";
 import { Logo } from "../logo/Logo";
+import { GiCardPick } from "react-icons/gi";
+import { HiOutlineUsers } from "react-icons/hi2";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -58,6 +60,11 @@ const items: MenuItem[] = [
     </span>
   ),
   getItem("Bins", "dashboard/bins", <CreditCard size={20} strokeWidth={1} />),
+  getItem(
+    "Aggreagators",
+    "dashboard/aggreagators",
+    <GiCardPick size={20} strokeWidth={1} />
+  ),
 
   getItem(
     "Statistics",
@@ -79,6 +86,13 @@ const items: MenuItem[] = [
         <BusFront strokeWidth={1} size={20} />,
         undefined,
         "statistics/bus"
+      ),
+      getItem(
+        "Users",
+        "dashboard/statistics/users",
+        <HiOutlineUsers strokeWidth={1} size={20} />,
+        undefined,
+        "statistics/users"
       ),
     ]
   ),

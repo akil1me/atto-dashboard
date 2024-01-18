@@ -267,7 +267,23 @@ export const Trips = () => {
                   lineStyle: {
                     width: 2,
                   },
-
+                  visualMap: [
+                    {
+                      show: false,
+                      type: "continuous",
+                      seriesIndex: 0,
+                      min: 0,
+                      max: 400,
+                    },
+                    {
+                      show: false,
+                      type: "continuous",
+                      seriesIndex: 1,
+                      dimension: 0,
+                      min: 0,
+                      max: lineData.length - 1,
+                    },
+                  ],
                   seriesLayoutBy: "row",
                   emphasis: {
                     focus: "series",
@@ -286,7 +302,6 @@ export const Trips = () => {
               }),
               {
                 type: "pie",
-                id: "pie",
                 // roseType: "radius",
 
                 // dataGroupId: 1,
@@ -311,8 +326,8 @@ export const Trips = () => {
                 },
                 animationType: "scale",
                 animationEasing: "elasticOut",
-                animationDelay: function () {
-                  return Math.random() * 200;
+                animationDelay(idx) {
+                  return +((idx + 1).toString() + "00");
                 },
                 data: pieChartData,
                 universalTransition: true,

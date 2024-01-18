@@ -8,6 +8,8 @@ import Trips from "../pages/trips";
 import Tariffs from "../pages/tariffs";
 import CardBin from "../pages/card-bin";
 import StatisticsMetro from "../pages/statistics-metro";
+import Aggreagators from "../pages/aggreagators";
+import StatisticsUsers from "../pages/statistics-users";
 
 export const routes = createBrowserRouter([
   {
@@ -48,6 +50,10 @@ export const routes = createBrowserRouter([
             element: <CardBin />,
           },
           {
+            path: "aggreagators",
+            element: <Aggreagators />,
+          },
+          {
             path: "statistics",
             children: [
               {
@@ -57,6 +63,10 @@ export const routes = createBrowserRouter([
               {
                 path: "metro",
                 element: <StatisticsMetro />,
+              },
+              {
+                path: "users",
+                element: <StatisticsUsers />,
               },
             ],
           },

@@ -2,7 +2,7 @@ import { Segmented, Tabs } from "antd";
 import { EChartsOption } from "echarts";
 import { AlignCenter, BusFront, TrainFrontTunnel } from "lucide-react";
 import ReactEcharts from "echarts-for-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { DashboardContext } from "../../layout";
 
 const items = [
@@ -26,6 +26,7 @@ const items = [
 
 export const CardBin = () => {
   const { dark } = useContext(DashboardContext);
+  const [segment, setSegment] = useState<"conut" | "amount">("conut");
 
   return (
     <div className="py-4 px-4">
@@ -46,6 +47,7 @@ export const CardBin = () => {
           })}
         />
         <Segmented
+          onChange={(e) => setSegment(e as "conut" | "amount")}
           options={[
             {
               label: "Conut",
@@ -73,7 +75,7 @@ export const CardBin = () => {
               },
             },
             legend: {
-              data: ["Paid", "Not Paid"],
+              data: ["Paid " + segment, "Not Paid " + segment],
             },
             grid: {
               left: "3%",
@@ -105,16 +107,22 @@ export const CardBin = () => {
             ],
             series: [
               {
-                name: "Paid",
+                name: "Paid " + segment,
                 type: "bar",
                 stack: "Total",
                 label: {
                   show: true,
+                  formatter: segment === "amount" ? "{c} sum" : "{c}",
                 },
                 emphasis: {
                   focus: "series",
                 },
-                data: [320, 302, 341, 374, 390, 450, 420],
+                data: [320, 302, 341, 374, 390, 450, 420].map((item) => {
+                  if (segment === "amount") {
+                    return item * 1700;
+                  }
+                  return item;
+                }),
                 barWidth: 50,
                 itemStyle: {
                   color: "#27AE60FF",
@@ -122,22 +130,23 @@ export const CardBin = () => {
                 animationDelay(idx) {
                   return +((idx + 1).toString() + "00");
                 },
-                animationEasing: "backIn",
-                animationEasingUpdate: "backIn",
+                animationEasing: "elasticOut",
+                animationEasingUpdate: "elasticOut",
               },
               {
-                name: "Not Paid",
+                name: "Not Paid " + segment,
                 type: "bar",
                 stack: "Total",
                 label: {
                   show: true,
-                  position: "left",
+                  color: "#fff",
+                  formatter: segment === "amount" ? "{c} sum" : "{c}",
                 },
                 emphasis: {
                   focus: "series",
                 },
-                animationEasing: "backIn",
-                animationEasingUpdate: "backIn",
+                animationEasing: "elasticOut",
+                animationEasingUpdate: "elasticOut",
                 animationDelay(idx) {
                   return +((idx + 1).toString() + "00");
                 },
@@ -145,7 +154,12 @@ export const CardBin = () => {
                 itemStyle: {
                   color: "#EE6666FF",
                 },
-                data: [-120, -132, -101, -134, -190, -230, -210],
+                data: [-120, -132, -101, -134, -190, -230, -210].map((item) => {
+                  if (segment === "amount") {
+                    return item * 1700;
+                  }
+                  return item;
+                }),
               },
             ],
           } as EChartsOption

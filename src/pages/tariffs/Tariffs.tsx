@@ -392,7 +392,13 @@ export const Tariffs = () => {
               toolbox: {
                 show: true,
                 feature: {
-                  magicType: { show: true, type: ["line", "bar"] },
+                  magicType: {
+                    show: true,
+                    type: ["line", "bar"],
+                    onclick() {
+                      console.log("click");
+                    },
+                  },
                   restore: { show: true },
                 },
               },
@@ -420,6 +426,9 @@ export const Tariffs = () => {
                     focus: "series",
                   },
                   data: getData("AVM"),
+                  animationEasing: "elasticOut",
+                  animationEasingUpdate: "elasticOut",
+                  animationDelay: 100,
                 },
                 {
                   name: "O`M",
@@ -430,6 +439,9 @@ export const Tariffs = () => {
                     focus: "series",
                   },
                   data: getData("O`M"),
+                  animationEasing: "elasticOut",
+                  animationEasingUpdate: "elasticOut",
+                  animationDelay: 200,
                 },
                 {
                   name: "TM",
@@ -440,6 +452,9 @@ export const Tariffs = () => {
                     focus: "series",
                   },
                   data: getData("TM"),
+                  animationEasing: "elasticOut",
+                  animationEasingUpdate: "elasticOut",
+                  animationDelay: 300,
                 },
                 {
                   name: "Льготный Mintrans",
@@ -450,6 +465,9 @@ export const Tariffs = () => {
                     focus: "series",
                   },
                   data: getData("Льготный Mintrans"),
+                  animationEasing: "elasticOut",
+                  animationEasingUpdate: "elasticOut",
+                  animationDelay: 400,
                 },
               ],
             } as EChartsOption
@@ -511,9 +529,9 @@ export const Tariffs = () => {
                       emphasis: {
                         focus: "series",
                       },
-                      animationDelay(idx: number) {
-                        return +((i * idx + 1).toString() + "0");
-                      },
+                      animationEasing: "elasticOut",
+                      animationEasingUpdate: "elasticOut",
+                      animationDelay: +((i + 1).toString() + "00"),
                       data: Object.values(fakeData.bus[item.name]),
                     };
                   }),
@@ -525,8 +543,10 @@ export const Tariffs = () => {
                   emphasis: {
                     focus: "series",
                   },
+                  animationEasing: "elasticOut",
+                  animationEasingUpdate: "elasticOut",
                   animationDelay(idx) {
-                    return +((1 * idx + 1).toString() + "00");
+                    return +((idx + 1).toString() + "00");
                   },
                   data: Object.values(fakeData.bus[getOptimalData()[0].name]),
                 },
@@ -575,6 +595,11 @@ export const Tariffs = () => {
                 name: "Metro",
                 type: "bar",
                 data: data.map((item) => item.metro),
+                animationEasing: "elasticOut",
+                animationEasingUpdate: "elasticOut",
+                animationDelay(idx) {
+                  return +((idx + 1).toString() + "00");
+                },
                 markPoint: {
                   data: [
                     { type: "max", name: "Max" },
@@ -603,6 +628,11 @@ export const Tariffs = () => {
                 },
                 barMaxWidth: 70,
                 universalTransition: true,
+                animationEasing: "elasticOut",
+                animationEasingUpdate: "elasticOut",
+                animationDelay(idx) {
+                  return +((idx + 1).toString() + "00");
+                },
               },
             ],
           } as EChartsOption
