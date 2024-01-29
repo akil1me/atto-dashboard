@@ -1,10 +1,8 @@
-import { useContext } from "react";
-import { DashboardContext } from "../../layout";
-import ReactEcharts from "echarts-for-react";
-import * as echarts from "echarts";
 import dayjs from "dayjs";
-import { Title } from "../../components";
+import * as echarts from "echarts";
+import ReactEcharts from "echarts-for-react";
 import { useLocalStorage } from "usehooks-ts";
+import { Title } from "../../components";
 const data = [
   ["2000-01-05", 116],
   ["2000-02-06", 129],

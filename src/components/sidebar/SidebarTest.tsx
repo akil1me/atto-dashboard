@@ -11,19 +11,18 @@ import {
   MoreVertical,
   TrainFrontTunnel,
 } from "lucide-react";
-import React, { useContext } from "react";
+import React from "react";
 import { FaRegStar } from "react-icons/fa";
 import { FcLineChart } from "react-icons/fc";
 import { GiCardPick } from "react-icons/gi";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { LiaMoneyCheckAltSolid } from "react-icons/lia";
 import { Link, useLocation } from "react-router-dom";
+import { useLocalStorage } from "usehooks-ts";
 import UzMap from "../../assets/uz.svg?react";
-import { DashboardContext } from "../../layout";
 import { useAppDispatch } from "../../redux";
 import { loginActions } from "../../redux/login.slice";
 import { Logo } from "../logo/Logo";
-import { useLocalStorage } from "usehooks-ts";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -152,7 +151,7 @@ const items: MenuItem[] = [
 ];
 
 const SidebarTest: React.FC = () => {
-  const { expanded, setExpanded } = useContext(DashboardContext);
+  const [expanded, setExpanded] = useLocalStorage("expanded", true);
   const [dark] = useLocalStorage("dark", true);
   const { pathname } = useLocation();
   console.log(pathname.substring(1));

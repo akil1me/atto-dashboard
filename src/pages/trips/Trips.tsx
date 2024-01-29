@@ -2,6 +2,7 @@ import { Segmented, Tabs } from "antd";
 import { SegmentedValue } from "antd/es/segmented";
 import dayjs from "dayjs";
 import dayjsRandom from "dayjs-random";
+import "dayjs/locale/ru";
 import durtion from "dayjs/plugin/duration";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
@@ -11,11 +12,10 @@ import {
   LineChartIcon,
   TrainFrontTunnel,
 } from "lucide-react";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
 import { Title } from "../../components";
 import { useChangeColor } from "../../hooks";
-import { DashboardContext } from "../../layout";
-import "dayjs/locale/ru";
 dayjs.locale("ru");
 dayjs.extend(dayjsRandom);
 dayjs.extend(durtion);
@@ -153,7 +153,7 @@ console.log(dataWeekly);
 
 export const Trips = () => {
   const echartsRef = useRef<ReactEcharts | null>(null);
-  const { dark } = useContext(DashboardContext);
+  const [dark] = useLocalStorage("dark", true);
   // const {} = useGetData("operator/dashboard/metro/stations", ["metro"]);
   const [hour, setHour] = useState(6);
   const [data, setData] = useState(dateDay);

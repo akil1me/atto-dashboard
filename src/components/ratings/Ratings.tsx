@@ -2,9 +2,8 @@
 
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
-import { useContext } from "react";
+import { useLocalStorage } from "usehooks-ts";
 import { Title } from "..";
-import { DashboardContext } from "../../layout";
 import { ratingData } from "./ratingBus";
 
 let category = [];
@@ -89,7 +88,7 @@ const option: echarts.EChartsOption = {
 };
 
 export const Ratings = () => {
-  const { dark } = useContext(DashboardContext);
+  const [dark] = useLocalStorage("dark", true);
   return (
     <div className="p-4">
       <Title>Рейтинг автобусов по автопарком</Title>

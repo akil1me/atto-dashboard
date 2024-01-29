@@ -1,16 +1,16 @@
-import { useContext, useMemo } from "react";
 import { EChartsOption } from "echarts";
-import { DashboardContext } from "../../layout";
 import ReactEcharts from "echarts-for-react";
-import { genData } from "./aggregator-data";
-import { useChangeColor } from "../../hooks";
+import { useMemo } from "react";
+import { useLocalStorage } from "usehooks-ts";
 import { Title } from "../../components";
+import { useChangeColor } from "../../hooks";
+import { genData } from "./aggregator-data";
 
 const data = genData();
 console.log(data);
 
 export const Aggreagators = () => {
-  const { dark } = useContext(DashboardContext);
+  const [dark] = useLocalStorage("dark", true);
   const pieColor = useChangeColor();
 
   const pieOpts: EChartsOption = useMemo(

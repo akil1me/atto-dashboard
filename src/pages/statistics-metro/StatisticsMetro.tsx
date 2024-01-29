@@ -3,12 +3,11 @@ import { SegmentedValue } from "antd/es/segmented";
 import { EChartsOption } from "echarts";
 import ReactEcharts from "echarts-for-react";
 import { BarChart, PieChart } from "lucide-react";
-import { useContext, useRef, useState } from "react";
-import { stations } from "../../json/stations";
-import { DashboardContext } from "../../layout";
-import { useChangeColor } from "../../hooks";
-import { Title } from "../../components";
+import { useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
+import { Title } from "../../components";
+import { useChangeColor } from "../../hooks";
+import { stations } from "../../json/stations";
 
 const dataSun = stations.map((station) => {
   return {
