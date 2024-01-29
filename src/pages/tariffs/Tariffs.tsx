@@ -63,17 +63,17 @@ const newData = getTariffs().map((item) => {
 });
 
 const getOptimalData = () => {
-  const bus: any = fakeData.bus;
+  const bus = fakeData.bus;
   const arr = [];
   for (let key in bus) {
-    const total = Object.values(bus[key]).reduce(
+    const total = Object.values(bus[key as TariffsData]).reduce(
       (acc, curr) => Number(acc) + Number(curr),
       0
     );
     if ((total as number) > 1) {
       arr.push({
         name: key,
-        data: bus[key],
+        data: bus[key as TariffsData],
       });
     }
   }
@@ -330,7 +330,9 @@ export const Tariffs = () => {
                       animationEasing: "elasticOut",
                       animationEasingUpdate: "elasticOut",
                       animationDelay: +((i + 1).toString() + "00"),
-                      data: Object.values(fakeData.bus[item.name]),
+                      data: Object.values(
+                        fakeData.bus[item.name as TariffsData]
+                      ),
                     };
                   }),
 
@@ -347,7 +349,9 @@ export const Tariffs = () => {
                   animationDelay(idx) {
                     return +((idx + 1).toString() + "00");
                   },
-                  data: Object.values(fakeData.bus[getOptimalData()[0].name]),
+                  data: Object.values(
+                    fakeData.bus[getOptimalData()[0].name as TariffsData]
+                  ),
                 },
               ],
             } as EChartsOption
