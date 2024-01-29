@@ -5,3 +5,4 @@ export * from "./sidebar/SideBar";
 export * from "./map/Map";
 export * from "./cards/StatisticsCard";
 export * from "./cards/ChartsCard";
+export * from "./title/Title";

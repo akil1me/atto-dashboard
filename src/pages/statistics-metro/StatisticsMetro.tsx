@@ -1,9 +1,13 @@
-import ReactEcharts from "echarts-for-react";
+import { Segmented } from "antd";
+import { SegmentedValue } from "antd/es/segmented";
 import { EChartsOption } from "echarts";
-import { useContext, useEffect, useRef, useState } from "react";
-import { DashboardContext } from "../../layout";
+import ReactEcharts from "echarts-for-react";
+import { BarChart, PieChart } from "lucide-react";
+import { useContext, useRef, useState } from "react";
 import { stations } from "../../json/stations";
-import { Button, Segmented } from "antd";
+import { DashboardContext } from "../../layout";
+import { useChangeColor } from "../../hooks";
+import { Title } from "../../components";
 
 const dataSun = stations.map((station) => {
   return {
@@ -47,11 +51,16 @@ const barOpts = {
     {
       type: "category",
       show: true,
-
+      axisLabel: {
+        show: true,
+        fontSize: 11,
+      },
       axisTick: { show: false },
+
       data: getData().map((item) => item.name),
     },
   ],
+
   universalTransition: true,
 
   series: [
@@ -68,6 +77,14 @@ const barOpts = {
       animationDelayUpdate: function (idx) {
         return idx * 5;
       },
+      itemStyle: {
+        borderRadius: [0, 20, 20, 0],
+      },
+      // label: {
+      //   show: true,
+      //   formatter: "{b}",
+      //   position: "outside",
+      // },
     },
   ],
   animationEasing: "elasticOut",
@@ -77,86 +94,112 @@ const barOpts = {
   },
 } as EChartsOption;
 
-const pieOpts = {
-  backgroundColor: "transparent",
-  title: {
-    show: true,
-    text: "Metro Statistics",
-  },
-  tooltip: {},
-  legend: {},
-  toolbox: {},
-  universalTransition: true,
-  series: {
-    id: "population",
-    type: "sunburst",
-    universalTransition: true,
-
-    levels: [
-      {},
-      {
-        r0: "20%",
-        r: "60%",
-        label: {
-          align: "center",
-        },
-      },
-      {
-        r0: "60%",
-        r: "72%",
-        label: {
-          position: "outside",
-          padding: 3,
-          silent: false,
-        },
-        itemStyle: {
-          borderWidth: 3,
-        },
-      },
-    ],
-    data: dataSun,
-  },
-} as EChartsOption;
-
 export const StatisticsMetro = () => {
   const { dark } = useContext(DashboardContext);
   const echartsRef = useRef<ReactEcharts | null>(null);
-  const [change, setChange] = useState(false);
-  const [segment, setSegment] = useState<"conut" | "amount">("conut");
-  useEffect(() => {
-    if (echartsRef.current) {
-      const chartInstance = echartsRef.current.getEchartsInstance();
+  const [segment, setSegment] = useState<"count" | "amount">("count");
 
-      if (change) {
-        chartInstance.setOption(barOpts, true);
-      } else {
+  const pieColor = useChangeColor();
+
+  const pieOpts = {
+    backgroundColor: "transparent",
+
+    tooltip: {},
+    legend: {},
+    toolbox: {},
+    universalTransition: true,
+    series: {
+      id: "population",
+      type: "sunburst",
+      universalTransition: true,
+      itemStyle: {
+        borderColor: pieColor,
+      },
+      levels: [
+        {},
+        {
+          r0: "20%",
+          r: "60%",
+          label: {
+            align: "center",
+          },
+          itemStyle: {
+            borderWidth: 4,
+          },
+        },
+        {
+          r0: "60%",
+          r: "72%",
+          label: {
+            position: "outside",
+            padding: 3,
+            silent: false,
+            minMargin: 100,
+          },
+          itemStyle: {
+            borderWidth: 3,
+          },
+        },
+      ],
+      data: dataSun,
+    },
+  } as EChartsOption;
+
+  const handleChangeChart = (e: SegmentedValue) => {
+    if (echartsRef.current) {
+      console.log(e);
+      const chartInstance = echartsRef.current.getEchartsInstance();
+      if (e === "pie") {
         chartInstance.setOption(pieOpts, true);
       }
+      if (e === "bar") {
+        chartInstance.setOption(barOpts, true);
+      }
     }
-  }, [change]);
-
-  const handleChange = () => {
-    setChange((prev) => !prev);
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div className="my-4 flex justify-between items-center">
-        <Button onClick={handleChange}>Change</Button>
+        <Title>Статискика в метро по линиям</Title>
 
-        <Segmented
-          onChange={(e) => setSegment(e as "conut" | "amount")}
-          options={[
-            {
-              label: "Conut",
-              value: "conut",
-            },
-            {
-              label: "Amount",
-              value: "amount",
-            },
-          ]}
-        />
+        <div className="flex items-center gap-4">
+          <Segmented
+            onChange={handleChangeChart}
+            options={[
+              {
+                label: (
+                  <div className="flex items-center gap-3">
+                    <PieChart width={25} height={18} />
+                  </div>
+                ),
+                value: "pie",
+              },
+              {
+                label: (
+                  <div className="flex items-center gap-3">
+                    <BarChart size={20} />
+                  </div>
+                ),
+                value: "bar",
+              },
+            ]}
+          />
+
+          <Segmented
+            onChange={(e) => setSegment(e as "count" | "amount")}
+            options={[
+              {
+                label: "Количество",
+                value: "count",
+              },
+              {
+                label: "Сумма",
+                value: "amount",
+              },
+            ]}
+          />
+        </div>
       </div>
       <ReactEcharts
         ref={echartsRef}

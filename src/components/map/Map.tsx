@@ -5,18 +5,13 @@ import { useEffect, useRef } from "react";
 
 //@ts-ignore
 echarts.registerMap("uzbekistan", geoJson);
-var data2 = [
-  { name: "Point A", value: [] },
-  { name: "Point B", value: [] },
-  // Add more data points as needed
-];
 
 interface dataTypes {
   name: string;
   value: number;
 }
 
-var data: dataTypes[] = [
+const data: dataTypes[] = [
   { name: "Toshkent sh", value: 4822023 },
   { name: "Namangan viloyati", value: 731449 },
   { name: "Toshkent viloyati", value: 6553255 },
@@ -42,12 +37,7 @@ const mapOption: echarts.EChartsOption = {
     },
     transitionDuration: 1,
   },
-  // animation: true,
-  // animationDurationUpdate: 1.5,
-  // animationDuration: 1.5,
-  // animationThreshold: 1.5,
-  // animationEasing: "linear",
-  // animationEasingUpdate: "linear",
+
   series: [
     {
       id: "population",
@@ -56,7 +46,6 @@ const mapOption: echarts.EChartsOption = {
       map: "uzbekistan",
 
       animation: true,
-      animationDurationUpdate: 1.1,
       animationEasing: "circularIn",
 
       zoom: 1.2,
@@ -79,7 +68,9 @@ const mapOption: echarts.EChartsOption = {
 
 export const Map = () => {
   const chartRef = useRef<ReactEcharts | null>(null);
+
   const handleWindowResize = () => {
+    console.log("asdsa");
     if (chartRef.current) {
       // Trigger ECharts resize method
       chartRef.current.getEchartsInstance().resize();
@@ -89,7 +80,7 @@ export const Map = () => {
   useEffect(() => {
     window.addEventListener("resize", handleWindowResize);
 
-    return window.removeEventListener("resize", handleWindowResize);
+    return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
   return (
     <ReactEcharts

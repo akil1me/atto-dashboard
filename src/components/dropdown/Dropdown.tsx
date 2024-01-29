@@ -2,10 +2,12 @@ import { Radio } from "antd";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { IconType } from "react-icons";
-import { FiGlobe, FiUser } from "react-icons/fi";
+import { FiGlobe, FiLogOut, FiUser } from "react-icons/fi";
 import { LanguageType } from "../../@types";
 import { useOnClickOutside } from "../../hooks";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
+import { useAppDispatch } from "../../redux";
+import { loginActions } from "../../redux/login.slice";
 
 export const languages: LanguageType[] = ["uz", "ru", "en"];
 
@@ -13,6 +15,7 @@ const StaggeredDropDown = () => {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const buttonRef = useRef(null);
+  const dispatch = useAppDispatch();
   const handleClickOutside = () => {
     setOpen(false);
     // console.log("handleClickOutside");
@@ -23,6 +26,9 @@ const StaggeredDropDown = () => {
     // console.log("handleClickInside");
   };
 
+  const handleLogout = () => {
+    dispatch(loginActions.setToken(null));
+  };
   useOnClickOutside(ref, handleClickOutside, buttonRef);
   return (
     <div className=" flex items-center justify-center">
@@ -46,7 +52,7 @@ const StaggeredDropDown = () => {
           // style={{ originY: "top" }}
           className="flex flex-col gap-2 p-2 rounded-lg border border-slate-700 bg-[var(--bgsidebar)] shadow-xl absolute top-14 min-w-[200px] w-full max-w-xs right-0 z-20 overflow-hidden"
         >
-          <Option setOpen={setOpen} Icon={FiUser} text="Profile" />
+          <Option setOpen={setOpen} Icon={FiUser} text="Профиль" />
 
           <Option
             setOpen={setOpen}
@@ -67,6 +73,13 @@ const StaggeredDropDown = () => {
               </Radio.Group>
             }
           />
+
+          <Option
+            setOpen={setOpen}
+            Icon={FiLogOut}
+            handleLogout={handleLogout}
+            text={"Выйти"}
+          />
         </motion.ul>
       </motion.div>
     </div>
@@ -76,15 +89,17 @@ const StaggeredDropDown = () => {
 const Option = ({
   text,
   Icon,
-  setOpen,
+
+  handleLogout,
 }: {
   text: string | React.ReactNode;
   Icon: IconType;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  handleLogout?: () => void;
 }) => {
   return (
     <motion.li
-      // onClick={() => setOpen(false)}
+      onClick={handleLogout}
       className="flex items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-[var(--bghoverdropdown)] text-slate-700 hover:text-indigo-500 transition-colors cursor-pointer"
     >
       <motion.span>

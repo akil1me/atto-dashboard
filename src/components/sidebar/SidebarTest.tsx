@@ -1,4 +1,3 @@
-import { AppstoreOutlined, MailOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Button, Menu } from "antd";
 import {
@@ -13,15 +12,17 @@ import {
   TrainFrontTunnel,
 } from "lucide-react";
 import React, { useContext } from "react";
+import { FaRegStar } from "react-icons/fa";
+import { FcLineChart } from "react-icons/fc";
+import { GiCardPick } from "react-icons/gi";
+import { HiOutlineUsers } from "react-icons/hi2";
 import { LiaMoneyCheckAltSolid } from "react-icons/lia";
 import { Link, useLocation } from "react-router-dom";
+import UzMap from "../../assets/uz.svg?react";
 import { DashboardContext } from "../../layout";
 import { useAppDispatch } from "../../redux";
 import { loginActions } from "../../redux/login.slice";
 import { Logo } from "../logo/Logo";
-import { GiCardPick } from "react-icons/gi";
-import { HiOutlineUsers } from "react-icons/hi2";
-
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -29,50 +30,78 @@ function getItem(
   key: React.Key,
   icon?: React.ReactNode,
   children?: MenuItem[],
-  to?: string,
+  to: string = "",
   className?: string
 ): MenuItem {
   return {
     key,
     icon,
     children,
-    label: children ? (
-      label
-    ) : (
-      <Link to={to ? to : label.toLocaleLowerCase()}>{label}</Link>
-    ),
+    to,
+    label: children ? label : <Link to={to}>{label}</Link>,
     className,
   } as MenuItem;
 }
 
 const items: MenuItem[] = [
   getItem(
-    "Main",
+    "Главная",
     "dashboard/main",
-    <LayoutDashboard size={20} strokeWidth={1} />
+    <LayoutDashboard size={20} strokeWidth={1} />,
+    undefined,
+    "main"
   ),
-  getItem("Trips", "dashboard/trips", <Bus size={20} strokeWidth={1} />),
   getItem(
-    "Tariffs",
+    "Проезды",
+    "dashboard/trips",
+    <Bus size={20} strokeWidth={1} />,
+    undefined,
+    "trips"
+  ),
+  getItem(
+    "Тариффы",
     "dashboard/tariffs",
     <span className="!text-xl">
       <LiaMoneyCheckAltSolid />
-    </span>
+    </span>,
+    undefined,
+    "tariffs"
   ),
-  getItem("Bins", "dashboard/bins", <CreditCard size={20} strokeWidth={1} />),
   getItem(
-    "Aggreagators",
+    "Бины",
+    "dashboard/bins",
+    <CreditCard size={20} strokeWidth={1} />,
+    undefined,
+    "bins"
+  ),
+  getItem(
+    "Агграгаторы",
     "dashboard/aggreagators",
-    <GiCardPick size={20} strokeWidth={1} />
+    <GiCardPick size={20} strokeWidth={1} />,
+    undefined,
+    "aggreagators"
   ),
-
   getItem(
-    "Statistics",
+    "Регионы",
+    "dashboard/regions",
+    <UzMap width={25} height={18} />,
+    undefined,
+    "regions"
+  ),
+  getItem(
+    "Рейтинг",
+    "dashboard/ratings",
+    <FaRegStar size={18} />,
+    undefined,
+    "ratings"
+  ),
+  getItem(
+    "Статистика",
     "dashboard/statistics",
     <BarChart3 size={20} strokeWidth={1} />,
     [
       getItem(
-        "Metro",
+        "Метро",
         "dashboard/statistics/metro",
         <span className="!text-xs">
           <TrainFrontTunnel strokeWidth={1} size={20} />
@@ -81,14 +110,14 @@ const items: MenuItem[] = [
         "statistics/metro"
       ),
       getItem(
-        "Bus",
+        "Автобус",
         "dashboard/statistics/bus",
         <BusFront strokeWidth={1} size={20} />,
         undefined,
         "statistics/bus"
       ),
       getItem(
-        "Users",
+        "Пользователи",
         "dashboard/statistics/users",
         <HiOutlineUsers strokeWidth={1} size={20} />,
         undefined,
@@ -96,22 +125,29 @@ const items: MenuItem[] = [
       ),
     ]
   ),
-  getItem("Navigation One", "sub1", <MailOutlined />, [
-    getItem("Option 5", "5"),
-    getItem("Option 6", "6"),
-    getItem("Option 7", "7"),
-    getItem("Option 8", "8"),
-  ]),
+  getItem(
+    "Все диаграммы",
+    "dashboard/all-charts",
+    <FcLineChart strokeWidth={1} size={20} />,
+    undefined,
+    "all-charts"
+  ),
+  // getItem("Navigation One", "sub1", <MailOutlined />, [
+  //   getItem("Option 5", "5"),
+  //   getItem("Option 6", "6"),
+  //   getItem("Option 7", "7"),
+  //   getItem("Option 8", "8"),
+  // ]),
 
-  getItem("Navigation Two", "sub2", <AppstoreOutlined />, [
-    getItem("Option 9", "9"),
-    getItem("Option 10", "10"),
+  // getItem("Navigation Two", "sub2", <AppstoreOutlined />, [
+  //   getItem("Option 9", "9"),
+  //   getItem("Option 10", "10"),
 
-    getItem("Submenu", "sub3", null, [
-      getItem("Option 11", "11"),
-      getItem("Option 12", "12"),
-    ]),
-  ]),
+  //   getItem("Submenu", "sub3", null, [
+  //     getItem("Option 11", "11"),
+  //     getItem("Option 12", "12"),
+  //   ]),
+  // ]),
 ];
 
 const SidebarTest: React.FC = () => {
@@ -148,7 +184,7 @@ const SidebarTest: React.FC = () => {
         />
       </div>
 
-      <div className="border-t-[0.1px]  border-[var(--sidebarline)] flex py-4 px-3">
+      <div className="border-t-[0.1px]  border-[var(--sidebarline)] flex  py-4 px-3">
         <Button
           onClick={handleLogout}
           icon={
@@ -159,7 +195,7 @@ const SidebarTest: React.FC = () => {
           className={`
               flex justify-between items-center
               overflow-hidden duration-500 transition-all ${
-                expanded ? "w-52 ml-3" : "w-0"
+                expanded ? "w-52 ml-3" : "w-0 ml-0"
               }
           `}
         >

@@ -42,7 +42,7 @@ export const StatisticsCard = () => {
     <div className="card-cell px-5 py-2 w-full">
       <h2 className="text-[var(--statisticscolor)] text-2xl">Charges Today</h2>
 
-      <div className="py-1 font-bold px-8 pb-2 text-4xl text-[var(--statisticscolor)] inline-block mt-2 border border-[#51ffff20]">
+      <div className="pt-2 font-bold h-16 px-8  text-4xl text-[var(--statisticscolor)] inline-block mt-2 border border-[#51ffff20]">
         <CountUp end={252830} separator="," decimal="," />
       </div>
 
@@ -53,7 +53,7 @@ export const StatisticsCard = () => {
               <div className="flex flex-col gap-1 mt-1" key={index}>
                 <div className="flex items-center justify-between">
                   <h3>{item.title}</h3>
-                  <p className="w-9">
+                  <p className="w-10">
                     <CountUp end={+item.amout} separator=" " decimal="," />
                   </p>
                 </div>

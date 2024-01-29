@@ -10,6 +10,11 @@ import CardBin from "../pages/card-bin";
 import StatisticsMetro from "../pages/statistics-metro";
 import Aggreagators from "../pages/aggreagators";
 import StatisticsUsers from "../pages/statistics-users";
+import Regions from "../pages/regions";
+import Ratings from "../components/ratings";
+import StatisticsBus from "../pages/bus";
+import ErrorBoundary from "antd/es/alert/ErrorBoundary";
+import AllPages from "../pages/all-pages";
 
 export const routes = createBrowserRouter([
   {
@@ -54,6 +59,22 @@ export const routes = createBrowserRouter([
             element: <Aggreagators />,
           },
           {
+            path: "regions",
+            element: (
+              <ErrorBoundary>
+                <Regions />
+              </ErrorBoundary>
+            ),
+          },
+          {
+            path: "ratings",
+            element: <Ratings />,
+          },
+          {
+            path: "all-charts",
+            element: <AllPages />,
+          },
+          {
             path: "statistics",
             children: [
               {
@@ -64,6 +85,12 @@ export const routes = createBrowserRouter([
                 path: "metro",
                 element: <StatisticsMetro />,
               },
+
+              {
+                path: "bus",
+                element: <StatisticsBus />,
+              },
+
               {
                 path: "users",
                 element: <StatisticsUsers />,

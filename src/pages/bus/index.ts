@@ -1,3 +1,3 @@
-import { Bus } from "./Bus";
+import { StatisticsBus } from "./Bus";
 
-export default Bus;
+export default StatisticsBus;

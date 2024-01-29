@@ -4,32 +4,45 @@ import { AlignCenter, BusFront, TrainFrontTunnel } from "lucide-react";
 import ReactEcharts from "echarts-for-react";
 import { useContext, useState } from "react";
 import { DashboardContext } from "../../layout";
+import { Title } from "../../components";
 
 const items = [
   {
-    text: "Metro",
+    text: "Общий",
     icon: (
       <div className="inline-block align-top">
         <TrainFrontTunnel />
       </div>
     ),
+    value: "all",
   },
   {
-    text: "Bus",
+    text: "Метро",
+    icon: (
+      <div className="inline-block align-top">
+        <TrainFrontTunnel />
+      </div>
+    ),
+    value: "metro",
+  },
+  {
+    text: "Автобус",
     icon: (
       <div className="inline-block align-top">
         <BusFront />
       </div>
     ),
+    value: "bus",
   },
 ];
 
 export const CardBin = () => {
   const { dark } = useContext(DashboardContext);
-  const [segment, setSegment] = useState<"conut" | "amount">("conut");
+  const [segment, setSegment] = useState<"count" | "amount">("count");
 
   return (
-    <div className="py-4 px-4">
+    <div className="py-4 px-4 w-full">
+      <Title>Диаграмма по бинам</Title>
       <div className="flex justify-between items-center">
         <Tabs
           className="mb-4"
@@ -42,19 +55,19 @@ export const CardBin = () => {
               key: id,
               label: item.text,
 
-              icon: item.icon,
+              // icon: item.icon,
             };
           })}
         />
         <Segmented
-          onChange={(e) => setSegment(e as "conut" | "amount")}
+          onChange={(e) => setSegment(e as "count" | "amount")}
           options={[
             {
-              label: "Conut",
-              value: "conut",
+              label: "Количество",
+              value: "count",
             },
             {
-              label: "Amount",
+              label: "Сумма",
               value: "amount",
             },
           ]}
@@ -74,9 +87,7 @@ export const CardBin = () => {
                 type: "shadow",
               },
             },
-            legend: {
-              data: ["Paid " + segment, "Not Paid " + segment],
-            },
+            legend: {},
             grid: {
               left: "3%",
               right: "4%",
@@ -107,7 +118,7 @@ export const CardBin = () => {
             ],
             series: [
               {
-                name: "Paid " + segment,
+                name: "Оплачено",
                 type: "bar",
                 stack: "Total",
                 label: {
@@ -117,7 +128,7 @@ export const CardBin = () => {
                 emphasis: {
                   focus: "series",
                 },
-                data: [320, 302, 341, 374, 390, 450, 420].map((item) => {
+                data: [10040, 757, 1823, 2680, 1792, 5702, 420].map((item) => {
                   if (segment === "amount") {
                     return item * 1700;
                   }
@@ -134,12 +145,12 @@ export const CardBin = () => {
                 animationEasingUpdate: "elasticOut",
               },
               {
-                name: "Not Paid " + segment,
+                name: "Не оплачено",
                 type: "bar",
                 stack: "Total",
                 label: {
                   show: true,
-                  color: "#fff",
+                  position: "outside",
                   formatter: segment === "amount" ? "{c} sum" : "{c}",
                 },
                 emphasis: {
@@ -154,7 +165,8 @@ export const CardBin = () => {
                 itemStyle: {
                   color: "#EE6666FF",
                 },
-                data: [-120, -132, -101, -134, -190, -230, -210].map((item) => {
+
+                data: [-428, -50, -100, -124, -11, -85, -210].map((item) => {
                   if (segment === "amount") {
                     return item * 1700;
                   }

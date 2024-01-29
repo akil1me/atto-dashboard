@@ -118,3 +118,7 @@ body {
   .ant-tabs-tab-btn {
   color: var(--statisticscolor);
 }
+:where(.css-dev-only-do-not-override-2rgkd4).ant-segmented
+  .ant-segmented-item-label {
+  display: flex;
+}

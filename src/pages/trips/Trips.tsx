@@ -1,40 +1,61 @@
 import { Segmented, Tabs } from "antd";
+import { SegmentedValue } from "antd/es/segmented";
 import dayjs from "dayjs";
 import dayjsRandom from "dayjs-random";
+import durtion from "dayjs/plugin/duration";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
-import { AlignCenter, BusFront, TrainFrontTunnel } from "lucide-react";
+import {
+  BarChart,
+  BusFront,
+  LineChartIcon,
+  TrainFrontTunnel,
+} from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useGetData } from "../../hooks";
+import { Title } from "../../components";
+import { useChangeColor } from "../../hooks";
 import { DashboardContext } from "../../layout";
-import durtion from "dayjs/plugin/duration";
+import "dayjs/locale/ru";
+dayjs.locale("ru");
 dayjs.extend(dayjsRandom);
 dayjs.extend(durtion);
 // console.log();
 
+const hexColors = [
+  "#3498db", // Синий
+  "#2ecc71", // Зеленый
+  "#e74c3c", // Красный
+  "#f39c12", // Оранжевый
+  "#9b59b6", // Фиолетовый
+  "#1abc9c", // Бирюзовый
+  "#e67e22", // Желтый
+  "#34495e", // Темно-серый
+  "#14FFF7", // Светло-серый
+].reverse();
+
 interface DataType {
   product?: string;
-  Total?: number;
-  Tariffs: number;
+  Всего?: number;
+  "Тарифный план": number;
   Qr: number;
-  "Transport cards": number;
-  "Bank cards": number;
-  "Virtual cards": number;
-  Privilege: number;
-  Aggregator: number;
-  "By cash": number;
+  "Траснпорная карта": number;
+  "Банковская карта": number;
+  "Виртиальная карта": number;
+  "Льготные поездки": number;
+  Аггрегаторы: number;
+  "Наличной оплате": number;
 }
 
 type DataTypePie =
   | "product"
-  | "Tariffs"
+  | "Тарифный план"
   | "Qr"
-  | "Transport cards"
-  | "Bank cards"
-  | "Virtual cards"
-  | "Privilege"
-  | "Aggregator"
-  | "By cash";
+  | "Траснпорная карта"
+  | "Банковская карта"
+  | "Виртиальная карта"
+  | "Льготные поездки"
+  | "Аггрегаторы"
+  | "Наличной оплате";
 
 // interface DataType {
 //   key: React.Key;
@@ -45,20 +66,31 @@ type DataTypePie =
 
 const items = [
   {
-    text: "Metro",
+    text: "Общий",
     icon: (
       <div className="inline-block align-top">
         <TrainFrontTunnel />
       </div>
     ),
+    value: "all",
   },
   {
-    text: "Bus",
+    text: "Метро",
+    icon: (
+      <div className="inline-block align-top">
+        <TrainFrontTunnel />
+      </div>
+    ),
+    value: "metro",
+  },
+  {
+    text: "Автобус",
     icon: (
       <div className="inline-block align-top">
         <BusFront />
       </div>
     ),
+    value: "bus",
   },
 ];
 
@@ -77,14 +109,14 @@ const getHours = () => {
 const dateDay: DataType[] = getHours().map((hour) => {
   return {
     product: hour,
-    Tariffs: Math.floor(Math.random() * 100),
+    "Тарифный план": Math.floor(Math.random() * 100),
     Qr: Math.floor(Math.random() * 100),
-    "Transport cards": Math.floor(Math.random() * 100),
-    "Bank cards": Math.floor(Math.random() * 300),
-    "Virtual cards": Math.floor(Math.random() * 100),
-    Privilege: Math.floor(Math.random() * 100),
-    Aggregator: Math.floor(Math.random() * 100),
-    "By cash": Math.floor(Math.random() * 100),
+    "Траснпорная карта": Math.floor(Math.random() * 100),
+    "Банковская карта": Math.floor(Math.random() * 300),
+    "Виртиальная карта": Math.floor(Math.random() * 100),
+    "Льготные поездки": Math.floor(Math.random() * 100),
+    Аггрегаторы: Math.floor(Math.random() * 100),
+    "Наличной оплате": Math.floor(Math.random() * 100),
   };
 });
 
@@ -94,8 +126,8 @@ const getDays = () => {
   for (let i = 1; i <= 7; i++) {
     const dayName = dayjs()
       .day(i % 7)
-      .format("ddd"); // Используем i % 7, чтобы циклически обходить дни недели
-    weekdaysArray.push(dayName);
+      .format("dddd"); // Используем i % 7, чтобы циклически обходить дни недели
+    weekdaysArray.push(dayName.slice(0, 1).toUpperCase() + dayName.slice(1));
   }
 
   return weekdaysArray;
@@ -106,34 +138,28 @@ const getDays = () => {
 const dataWeekly: DataType[] = getDays().map((day) => {
   return {
     product: day,
-    Tariffs: Math.floor(Math.random() * 1000),
+    "Тарифный план": Math.floor(Math.random() * 1000),
     Qr: Math.floor(Math.random() * 1000),
-    "Transport cards": Math.floor(Math.random() * 1000),
-    "Bank cards": Math.floor(Math.random() * 1500),
-    "Virtual cards": Math.floor(Math.random() * 1000),
-    Privilege: Math.floor(Math.random() * 1000),
-    Aggregator: Math.floor(Math.random() * 1000),
-    "By cash": Math.floor(Math.random() * 1000),
+    "Траснпорная карта": Math.floor(Math.random() * 1000),
+    "Банковская карта": Math.floor(Math.random() * 1500),
+    "Виртиальная карта": Math.floor(Math.random() * 1000),
+    "Льготные поездки": Math.floor(Math.random() * 1000),
+    Аггрегаторы: Math.floor(Math.random() * 1000),
+    "Наличной оплате": Math.floor(Math.random() * 1000),
   };
 });
 
-const lineData = [...dateDay].map((item) => {
-  const itemNums = Object.values(item).filter(
-    (item) => typeof item === "number"
-  );
-
-  let total = itemNums.reduce((acc, curr) => acc + curr, 0);
-
-  return { ...item, Total: total };
-});
-// console.log(fate);
+console.log(dataWeekly);
 
 export const Trips = () => {
   const echartsRef = useRef<ReactEcharts | null>(null);
   const { dark } = useContext(DashboardContext);
-  const {} = useGetData("operator/dashboard/metro/stations", ["metro"]);
+  // const {} = useGetData("operator/dashboard/metro/stations", ["metro"]);
   const [hour, setHour] = useState(6);
   const [data, setData] = useState(dateDay);
+  const [chartType, setChartType] = useState<"bar" | "line">("line");
+  const [dateFormat, setDateFormat] = useState("daily");
+  const pieColor = useChangeColor();
 
   const hanldeChange = (evt: unknown) => {
     const index = evt as { dataIndex?: number };
@@ -153,6 +179,26 @@ export const Trips = () => {
     }
   }, []);
 
+  const handleChangeFormat = (e: SegmentedValue) => {
+    setHour(6);
+    setDateFormat(e as string);
+    if (e === "weekly") {
+      setData(dataWeekly);
+    } else {
+      setData(dateDay);
+    }
+  };
+
+  const lineData = [...data].map((item) => {
+    const itemNums = Object.values(item).filter(
+      (item) => typeof item === "number"
+    );
+
+    let total = itemNums.reduce((acc, curr) => acc + curr, 0);
+
+    return { ...item, Total: chartType === "line" ? total : null };
+  });
+
   const pieChartData = Object.keys(data[hour])
     .slice(1)
     .map((item) => {
@@ -164,6 +210,7 @@ export const Trips = () => {
 
   return (
     <div className="mt-6 px-4 ">
+      <Title className="mb-6">Диаграмма по проездам</Title>
       <div className="flex justify-between items-center">
         <Tabs
           className="mb-4"
@@ -176,43 +223,71 @@ export const Trips = () => {
               key: id,
               label: item.text,
 
-              icon: item.icon,
+              // icon: item.icon,
             };
           })}
         />
-        <Segmented
-          options={[
-            {
-              label: "Daily",
-              value: "daily",
-            },
-            {
-              label: "Weekly",
-              value: "weekly",
-            },
-            {
-              label: "Monthly",
-              value: "monthly",
-              disabled: true,
-            },
-            {
-              label: "Yearly",
-              value: "yearly",
-              disabled: true,
-            },
-          ]}
-        />
+
+        <div className="flex gap-2 items-center">
+          <Segmented
+            onChange={(e) => setChartType(e as "line" | "bar")}
+            options={[
+              {
+                label: (
+                  <div className="flex items-center gap-2">
+                    <LineChartIcon size={20} strokeWidth={1.5} />
+                  </div>
+                ),
+                value: "line",
+              },
+              {
+                label: (
+                  <div className="flex items-center gap-2">
+                    <BarChart size={20} strokeWidth={1.5} />
+                  </div>
+                ),
+                value: "bar",
+              },
+            ]}
+          />
+          <Segmented
+            onChange={handleChangeFormat}
+            options={[
+              {
+                label: "По часам",
+                value: "daily",
+              },
+              {
+                label: "По дням недели",
+                value: "weekly",
+              },
+              {
+                label: "По дням месца",
+                value: "monthly",
+                disabled: true,
+              },
+              {
+                label: "По месцам",
+                value: "yearly",
+                disabled: true,
+              },
+            ]}
+          />
+        </div>
       </div>
 
       <ReactEcharts
         ref={echartsRef}
         theme={dark ? "dark" : ""}
         className="[&_div]:!w-auto [&_div]:!h-auto mb-5"
-        style={{ width: "100%", height: "1000px" }}
+        style={{ width: "100%", height: "800px" }}
         option={
           {
             title: {
-              text: `Time ${hour}:00 - ${hour}:59`,
+              text:
+                dateFormat === "daily"
+                  ? `Время ${hour}:00 - ${hour}:59`
+                  : getDays()[hour],
               left: 0,
               right: 0,
             },
@@ -225,18 +300,14 @@ export const Trips = () => {
               transitionDuration: 1.5,
             },
 
-            toolbox: {
-              show: true,
-              feature: {
-                magicType: { show: true, type: ["line", "bar"] },
-                restore: { show: true },
-              },
-            },
-
             dataset: {
               source: lineData,
             },
-            xAxis: { type: "category", offset: 10, boundaryGap: false },
+            xAxis: {
+              type: "category",
+              offset: 10,
+              boundaryGap: chartType === "bar",
+            },
             yAxis: {
               type: "value",
               gridIndex: 0,
@@ -245,10 +316,16 @@ export const Trips = () => {
                 show: true,
               },
             },
-            grid: { top: "50%", containLabel: true },
+            grid: {
+              top: "50%",
+              containLabel: true,
+              left: dateFormat === "weekly" ? 40 : 20,
+              right: dateFormat === "weekly" ? 40 : 20,
+            },
             dataZoom: [
               {
                 type: "slider",
+                brushSelect: false,
                 show: true,
                 minSpan: 10,
               },
@@ -258,15 +335,21 @@ export const Trips = () => {
                 minSpan: 10,
               },
             ],
+            universalTransition: true,
 
             series: [
-              ...[...new Array(9)].map(() => {
+              ...[...hexColors].map((color) => {
                 return {
-                  type: "line",
+                  type: chartType,
                   smooth: true,
                   lineStyle: {
                     width: 2,
                   },
+
+                  itemStyle: {
+                    color: color,
+                  },
+                  barWidth: dateFormat === "daily" ? 20 : 40,
                   visualMap: [
                     {
                       show: false,
@@ -284,6 +367,7 @@ export const Trips = () => {
                       max: lineData.length - 1,
                     },
                   ],
+
                   seriesLayoutBy: "row",
                   emphasis: {
                     focus: "series",
@@ -293,20 +377,25 @@ export const Trips = () => {
                   symbol: "circle",
                   animationEasing: "quadraticIn",
                   markLine: {},
+
                   stack: "a",
                   areaStyle: {
                     opacity: 0.3,
-                    shadowColor: "red",
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                      { offset: 0, color: color + "bc" }, // Start color (Sky Blue)
+                      { offset: 0.5, color: color + "8a" }, // End color (Transparent)
+                      { offset: 1, color: color + "2a" },
+                    ]),
                   },
                 };
               }),
               {
                 type: "pie",
-                // roseType: "radius",
 
                 // dataGroupId: 1,
                 center: ["50%", "25%"],
-                radius: [35, 130],
+                radius: [25, 110],
+                // radius: "30%",
                 emphasis: {
                   label: {
                     show: true,
@@ -318,16 +407,19 @@ export const Trips = () => {
                 },
                 selectedMode: "single",
                 itemStyle: {
-                  borderRadius: 8,
-                  borderColor: "white",
-
-                  borderWidth: 2,
-                  shadowColor: "red",
+                  shadowBlur: 2,
+                  shadowColor: pieColor,
+                  borderWidth: 4,
+                  borderRadius: 10,
+                  borderColor: pieColor,
                 },
+                color: hexColors,
                 animationType: "scale",
                 animationEasing: "elasticOut",
                 animationDelay(idx) {
-                  return +((idx + 1).toString() + "00");
+                  if (idx) {
+                    return +(idx.toString() + "00");
+                  }
                 },
                 data: pieChartData,
                 universalTransition: true,
@@ -341,7 +433,7 @@ export const Trips = () => {
         }
       />
 
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      {/* <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -379,7 +471,7 @@ export const Trips = () => {
             })}
           </tbody>
         </table>
-      </div>
+      </div> */}
     </div>
   );
 };
