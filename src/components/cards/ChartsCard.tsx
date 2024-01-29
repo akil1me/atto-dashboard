@@ -1,10 +1,10 @@
-import { ChartHead } from "../chart-head/ChartHead";
-import ReactEcharts from "echarts-for-react";
 import * as echarts from "echarts";
+import ReactEcharts from "echarts-for-react";
+import { ChartHead } from "../chart-head/ChartHead";
 
+import { useEffect, useRef } from "react";
+import { useLocalStorage } from "usehooks-ts";
 import "./Card.scss";
-import { useContext, useEffect, useRef } from "react";
-import { DashboardContext } from "../../layout";
 interface ChartsCardProps {
   option?: echarts.EChartsOption;
   title: string;
@@ -67,7 +67,7 @@ export const ChartsCard: React.FC<ChartsCardProps> = ({
   height = "100%",
 }) => {
   const chartRef = useRef<ReactEcharts | null>(null);
-  const { dark } = useContext(DashboardContext);
+  const [dark] = useLocalStorage("dark", true);
   const handleWindowResize = () => {
     if (chartRef.current) {
       // Trigger ECharts resize method
@@ -81,12 +81,6 @@ export const ChartsCard: React.FC<ChartsCardProps> = ({
     return window.removeEventListener("resize", handleWindowResize);
   }, [chartRef.current]);
 
-  // useEffect(() => {
-  //   const chartInstance = chartRef.current?.getEchartsInstance();
-  //   if (chartInstance && option) {
-  //     chartInstance.setOption(option);
-  //   }
-  // }, [option]);
   return (
     <div className="card-cell min-h-[260px] w-full">
       <ChartHead title={title} color="bg-green" />

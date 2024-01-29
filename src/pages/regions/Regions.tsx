@@ -3,11 +3,11 @@ import { SegmentedValue } from "antd/es/segmented";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 import { BarChart } from "lucide-react";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
 import UzMap from "../../assets/uz.svg?react";
-import geoJson from "../../json/regions.json";
-import { DashboardContext } from "../../layout";
 import { Title } from "../../components";
+import geoJson from "../../json/regions.json";
 
 echarts.registerMap("uzb", {
   //@ts-ignore
@@ -153,8 +153,8 @@ const barOpts = {
 } as echarts.EChartsOption;
 
 export const Regions = () => {
-  const { dark } = useContext(DashboardContext);
   const chartRef = useRef<ReactEcharts | null>(null);
+  const [dark] = useLocalStorage("dark", true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [chartType, setChartType] = useState("map");

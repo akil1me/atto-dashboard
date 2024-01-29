@@ -23,6 +23,7 @@ import { DashboardContext } from "../../layout";
 import { useAppDispatch } from "../../redux";
 import { loginActions } from "../../redux/login.slice";
 import { Logo } from "../logo/Logo";
+import { useLocalStorage } from "usehooks-ts";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -151,7 +152,8 @@ const items: MenuItem[] = [
 ];
 
 const SidebarTest: React.FC = () => {
-  const { dark, expanded, setExpanded } = useContext(DashboardContext);
+  const {  expanded, setExpanded } = useContext(DashboardContext);
+  const [dark] = useLocalStorage("dark", true);
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const handleLogout = () => {

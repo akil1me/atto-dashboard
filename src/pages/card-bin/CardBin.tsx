@@ -1,9 +1,9 @@
 import { Segmented, Tabs } from "antd";
 import { EChartsOption } from "echarts";
-import { AlignCenter, BusFront, TrainFrontTunnel } from "lucide-react";
 import ReactEcharts from "echarts-for-react";
-import { useContext, useState } from "react";
-import { DashboardContext } from "../../layout";
+import { BusFront, TrainFrontTunnel } from "lucide-react";
+import { useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
 import { Title } from "../../components";
 
 const items = [
@@ -37,7 +37,7 @@ const items = [
 ];
 
 export const CardBin = () => {
-  const { dark } = useContext(DashboardContext);
+  const [dark] = useLocalStorage("dark", true);
   const [segment, setSegment] = useState<"count" | "amount">("count");
 
   return (

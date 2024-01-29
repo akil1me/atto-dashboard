@@ -68,28 +68,34 @@ const mapOption: echarts.EChartsOption = {
 
 export const Map = () => {
   const chartRef = useRef<ReactEcharts | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleWindowResize = () => {
-    console.log("asdsa");
     if (chartRef.current) {
-      // Trigger ECharts resize method
       chartRef.current.getEchartsInstance().resize();
     }
   };
 
   useEffect(() => {
-    window.addEventListener("resize", handleWindowResize);
+    const resizeObserver = new ResizeObserver(handleWindowResize);
 
-    return () => window.removeEventListener("resize", handleWindowResize);
+    if (containerRef.current) resizeObserver.observe(containerRef.current);
+
+    return () => {
+      if (containerRef.current) resizeObserver.unobserve(containerRef.current);
+    };
   }, []);
+
   return (
-    <ReactEcharts
-      echarts={echarts}
-      ref={chartRef}
-      option={mapOption}
-      className="[&_div]:!w-auto [&_div]:!h-auto"
-      style={{ width: "100%", height: "100%" }}
-      // onEvents={onEvents}
-    />
+    <div ref={containerRef} className="w-full h-full">
+      <ReactEcharts
+        echarts={echarts}
+        ref={chartRef}
+        option={mapOption}
+        className="[&_div]:!w-auto [&_div]:!h-auto"
+        style={{ width: "100%", height: "100%" }}
+        // onEvents={onEvents}
+      />
+    </div>
   );
 };

@@ -4,6 +4,7 @@ import ReactEcharts from "echarts-for-react";
 import * as echarts from "echarts";
 import dayjs from "dayjs";
 import { Title } from "../../components";
+import { useLocalStorage } from "usehooks-ts";
 const data = [
   ["2000-01-05", 116],
   ["2000-02-06", 129],
@@ -141,7 +142,7 @@ const yearlyOption: echarts.EChartsOption = {
 };
 
 export const StatisticsUsers = () => {
-  const { dark } = useContext(DashboardContext);
+  const [dark] = useLocalStorage("dark", true);
   return (
     <div className="p-4">
       <Title className="mb-16">

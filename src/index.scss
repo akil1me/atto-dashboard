@@ -41,12 +41,6 @@ body {
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
-:where(.css-dev-only-do-not-override-2rgkd4).ant-switch {
-  background-color: rgba(86, 86, 86, 0.45);
-}
-:where(.css-dev-only-do-not-override-2rgkd4).ant-switch.ant-switch-checked {
-  background-color: rgb(3, 18, 37);
-}
 
 ::-webkit-scrollbar {
   width: 4px;
@@ -120,5 +114,9 @@ body {
 }
 :where(.css-dev-only-do-not-override-2rgkd4).ant-segmented
   .ant-segmented-item-label {
+  display: flex;
+}
+
+.ant-segmented-item-label {
   display: flex;
 }

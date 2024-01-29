@@ -1,7 +1,7 @@
-import ReactEcharts from "echarts-for-react";
 import { EChartsOption } from "echarts";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { DashboardContext } from "../../layout";
+import ReactEcharts from "echarts-for-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
 import { Title } from "../../components";
 import { useChangeColor } from "../../hooks";
 import { fakeData } from "./fakeData";
@@ -84,7 +84,7 @@ console.log(newData);
 // const pie
 
 export const Tariffs = () => {
-  const { dark } = useContext(DashboardContext);
+  const [dark] = useLocalStorage("dark", true);
   const echartsRef = useRef<ReactEcharts | null>(null);
   const busRef = useRef<ReactEcharts | null>(null);
   const [busIndex, setBusIndex] = useState(10);

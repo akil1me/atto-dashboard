@@ -7,6 +7,11 @@ const lightTheme: ThemeConfig = {
     colorPrimary: "#27AE60",
     linkHoverDecoration: "none",
   },
+  components: {
+    Switch: {
+      colorTextQuaternary: "#989494 !important",
+    },
+  },
 };
 
 const darkTheme: ThemeConfig = {

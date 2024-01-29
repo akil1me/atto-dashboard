@@ -1,12 +1,12 @@
 import { Button } from "antd";
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { Logo } from "../logo/Logo";
+import { useLocalStorage } from "usehooks-ts";
 import { DashboardContext } from "../../layout";
 import { useAppDispatch } from "../../redux";
 import { loginActions } from "../../redux/login.slice";
-import { IoMdClose } from "react-icons/io";
+import { Logo } from "../logo/Logo";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -19,7 +19,8 @@ interface SidebarItem {
 }
 
 export function Sidebar({ children }: SidebarProps) {
-  const { dark, expanded, setExpanded } = useContext(DashboardContext);
+  const { expanded, setExpanded } = useContext(DashboardContext);
+  const [dark] = useLocalStorage("dark", true);
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {

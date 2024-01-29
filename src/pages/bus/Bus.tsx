@@ -1,12 +1,11 @@
 import { Segmented } from "antd";
+import { SegmentedValue } from "antd/es/segmented";
 import { EChartsOption } from "echarts";
 import ReactEcharts from "echarts-for-react";
-import { useContext, useRef, useState } from "react";
-import { busData } from "../../json";
-import { DashboardContext } from "../../layout";
+import { useRef, useState } from "react";
 import { Title } from "../../components";
-import { SegmentedValue } from "antd/es/segmented";
 import { useChangeColor } from "../../hooks";
+import { busData } from "../../json";
 
 const dataChanger = (val: "amount" | "count") => {
   return busData.bus.children.map((item) => {
@@ -28,7 +27,6 @@ const dataChanger = (val: "amount" | "count") => {
 };
 
 export const StatisticsBus = () => {
-  const { dark } = useContext(DashboardContext);
   const echartsRef = useRef<ReactEcharts | null>(null);
   const [segment, setSegment] = useState<"count" | "amount">("count");
   const treeColor = useChangeColor();

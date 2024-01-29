@@ -1,11 +1,11 @@
 // Generate data
 
 import * as echarts from "echarts";
-import { useContext } from "react";
-import { DashboardContext } from "../../layout";
 import ReactEcharts from "echarts-for-react";
-import { ratingData } from "./ratingBus";
+import { useContext } from "react";
 import { Title } from "..";
+import { DashboardContext } from "../../layout";
+import { ratingData } from "./ratingBus";
 
 let category = [];
 let lineData = [];

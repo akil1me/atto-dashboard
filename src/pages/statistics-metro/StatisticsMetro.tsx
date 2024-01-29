@@ -8,6 +8,7 @@ import { stations } from "../../json/stations";
 import { DashboardContext } from "../../layout";
 import { useChangeColor } from "../../hooks";
 import { Title } from "../../components";
+import { useLocalStorage } from "usehooks-ts";
 
 const dataSun = stations.map((station) => {
   return {
@@ -95,7 +96,7 @@ const barOpts = {
 } as EChartsOption;
 
 export const StatisticsMetro = () => {
-  const { dark } = useContext(DashboardContext);
+  const [dark] = useLocalStorage("dark", true);
   const echartsRef = useRef<ReactEcharts | null>(null);
   const [segment, setSegment] = useState<"count" | "amount">("count");
 
