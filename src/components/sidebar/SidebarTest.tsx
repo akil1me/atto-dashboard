@@ -152,9 +152,10 @@ const items: MenuItem[] = [
 ];
 
 const SidebarTest: React.FC = () => {
-  const {  expanded, setExpanded } = useContext(DashboardContext);
+  const { expanded, setExpanded } = useContext(DashboardContext);
   const [dark] = useLocalStorage("dark", true);
   const { pathname } = useLocation();
+  console.log(pathname.substring(1));
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(loginActions.setToken(null));
@@ -178,7 +179,11 @@ const SidebarTest: React.FC = () => {
       <div className="flex-1 overflow-y-auto">
         <Menu
           className="bg-transparent w-full transition-all duration-500"
-          defaultSelectedKeys={[pathname.substring(1)]}
+          defaultSelectedKeys={[
+            pathname.substring(1) === "dashboard"
+              ? "dashboard/main"
+              : pathname.substring(1),
+          ]}
           mode="inline"
           theme={dark ? "dark" : "light"}
           inlineCollapsed={!expanded}
