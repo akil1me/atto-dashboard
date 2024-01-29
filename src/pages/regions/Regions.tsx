@@ -175,8 +175,6 @@ export const Regions = () => {
   }, []);
 
   const handleChangeChart = (e: SegmentedValue) => {
-    console.log(e);
-
     setChartType(e as "map" | "bar");
   };
 

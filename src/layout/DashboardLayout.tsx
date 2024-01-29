@@ -1,5 +1,5 @@
 import { Switch } from "antd";
-import { Dispatch, createContext, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useLocalStorage } from "usehooks-ts";
 import { Logo } from "../components";
@@ -36,6 +36,8 @@ export const DashboardLayout = () => {
             }`}
           >
             <Logo dark={dark} open={!expanded} />
+
+            <div>Dashboard</div>
           </div>
 
           <div className="flex items-center gap-3">
