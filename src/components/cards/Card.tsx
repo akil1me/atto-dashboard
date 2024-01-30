@@ -52,7 +52,6 @@ export const Card: React.FC<CardProps> = ({ className = "" }) => {
               key={index}
               status="active"
               strokeColor={"#51FFFEFF"}
-              strokeWidth={5}
               type="circle"
               percent={seria}
               trailColor="#d3d3d3"

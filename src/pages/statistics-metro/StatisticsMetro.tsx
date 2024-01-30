@@ -5,7 +5,6 @@ import ReactEcharts from "echarts-for-react";
 import { BarChart, PieChart } from "lucide-react";
 import { useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { Title } from "../../components";
 import { useChangeColor } from "../../hooks";
 import { stations } from "../../json/stations";
 
@@ -161,8 +160,6 @@ export const StatisticsMetro = () => {
   return (
     <div className="w-full">
       <div className="my-4 flex justify-between items-center">
-        <Title>Статискика в метро по линиям</Title>
-
         <div className="flex items-center gap-4">
           <Segmented
             onChange={handleChangeChart}

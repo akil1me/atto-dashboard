@@ -1,4 +1,5 @@
 import { AxiosError } from "axios";
+import { useOutletContext } from "react-router-dom";
 
 export type LanguageType = "uz" | "en" | "ru";
 export interface ErrorTypes {

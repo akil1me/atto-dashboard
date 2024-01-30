@@ -29,7 +29,7 @@ export const Home = () => {
     <>
       <Eerth className="svg-file absolute object-cover w-full h-full z-[-1] left-0 right-0 top-16 bottom-0 m-auto" />
       <div className="mt-5 flex justify-between flex-wrap gap-7">
-        <div className="flex flex-col flex-1 gap-7 min-w-[300px]  max-w-[700px] mx-auto lg:max-w-[900px]">
+        <div className="flex flex-col flex-1 gap-5 min-w-[300px]  max-w-[700px] mx-auto lg:max-w-[900px]">
           <Card />
           <ChartsCard
             title="Metro lines"
@@ -138,14 +138,14 @@ export const Home = () => {
             }}
           />
         </div>
-        <div className="flex flex-col -order-1 lg:order-[0] items-stretch min-w-[500px]  md:flex-auto gap-7">
+        <div className="flex flex-col -order-1 lg:order-[0] items-stretch min-w-[500px]  md:flex-auto gap-5">
           <StatisticsCard />
           <div className="h-full min-h-[400px]">
             <Map />
           </div>
         </div>
 
-        <div className="flex flex-col flex-1 min-w-[300px] max-w-[700px] mx-auto gap-7">
+        <div className="flex flex-col flex-1 min-w-[300px] max-w-[700px] mx-auto gap-5">
           <ChartsCard title="Parking statistics" />
           <ChartsCard
             title="Metro and Bus"
