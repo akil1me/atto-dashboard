@@ -5,6 +5,7 @@ import ReactEcharts from "echarts-for-react";
 import { BarChart, PieChart } from "lucide-react";
 import { useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
+import { DateRange, Title } from "../../components";
 import { useChangeColor } from "../../hooks";
 import { stations } from "../../json/stations";
 
@@ -158,8 +159,13 @@ export const StatisticsMetro = () => {
   };
 
   return (
-    <div className="w-full">
-      <div className="my-4 flex justify-between items-center">
+    <div className="w-full px-4">
+      <div className="flex justify-between items-center">
+        <Title>Статискика в метро по линиям</Title>
+
+        <DateRange />
+      </div>
+      <div className="my-4 flex justify-end items-center">
         <div className="flex items-center gap-4">
           <Segmented
             onChange={handleChangeChart}
@@ -202,7 +208,7 @@ export const StatisticsMetro = () => {
         ref={echartsRef}
         theme={dark ? "dark" : ""}
         className="[&_div]:!w-auto [&_div]:!h-auto mb-14"
-        style={{ width: "100%", height: "720px" }}
+        style={{ width: "100%", height: "700px" }}
         option={pieOpts}
       />
     </div>

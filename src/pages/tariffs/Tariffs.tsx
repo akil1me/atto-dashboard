@@ -2,7 +2,7 @@ import { EChartsOption } from "echarts";
 import ReactEcharts from "echarts-for-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { Title } from "../../components";
+import { DateRange, Title } from "../../components";
 import { useChangeColor } from "../../hooks";
 import { fakeData } from "./fakeData";
 
@@ -130,7 +130,6 @@ export const Tariffs = () => {
         }),
     [busIndex]
   );
-
   const option = useMemo(
     () =>
       ({
@@ -252,11 +251,15 @@ export const Tariffs = () => {
       } as EChartsOption),
     [newData, pieChartData, dark]
   );
+
   // console.log(pieChartData);
 
   return (
     <div className="mt-6 px-4">
-      <Title className="mb-10">Диаграмма по тарифным планам </Title>
+      <div className="flex justify-between items-center">
+        <Title className="mb-10">Диаграмма по тарифным планам </Title>
+        <DateRange />
+      </div>
       <div className="flex items-center gap-5 flex-col">
         <ReactEcharts
           ref={busRef}

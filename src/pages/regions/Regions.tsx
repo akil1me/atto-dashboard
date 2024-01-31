@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import UzMap from "../../assets/uz.svg?react";
 import { Title } from "../../components";
-import geoJson from "../../json/regions.json";
+import geoJson from "../../json/uz.json";
 
 echarts.registerMap("uzb", {
   //@ts-ignore
@@ -33,7 +33,7 @@ const data = [
   },
   {
     name: "Toshkent viloyati",
-    value: 6523245,
+    value: 1523245,
   },
   { name: "Fargʻona viloyati", value: 2949131 },
   { name: "Andijon viloyati", value: 380430 },
@@ -64,7 +64,7 @@ const mapOption: echarts.EChartsOption = {
   visualMap: {
     left: "right",
     min: 0,
-    max: 1000000,
+    max: 4000000,
     inRange: {
       color: [
         "#313695",
@@ -87,7 +87,7 @@ const mapOption: echarts.EChartsOption = {
 
       animation: true,
       animationEasing: "circularIn",
-      animationDurationUpdate: 3000,
+      animationDurationUpdate: 1000,
       // zoom: 1.2,
       // emphasis: {
       //   itemStyle: {
@@ -143,9 +143,10 @@ const barOpts = {
       showBackground: true,
       data: data.map((item) => item.value),
       universalTransition: true,
-      animationDurationUpdate: 3000,
+      animationDurationUpdate: 1000,
+      barMaxWidth: 15,
       itemStyle: {
-        borderRadius: 5,
+        borderRadius: [0, 20, 20, 0],
       },
     },
   ],
@@ -186,7 +187,7 @@ export const Regions = () => {
   return (
     <div ref={containerRef}>
       <Title>Очет по регионам</Title>
-      <div className="flex justify-end items-center  mt-10 relative">
+      <div className="relative flex items-center justify-end mt-10">
         <Segmented
           onChange={handleChangeChart}
           options={[
@@ -200,7 +201,7 @@ export const Regions = () => {
             },
             {
               label: (
-                <div className="flex items-center gap-3 relative">
+                <div className="relative flex items-center gap-3">
                   <BarChart size={20} />
                 </div>
               ),

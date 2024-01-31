@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { Title } from "../../components";
+import { DateRange, Title } from "../../components";
 import { useChangeColor } from "../../hooks";
 dayjs.locale("ru");
 dayjs.extend(dayjsRandom);
@@ -209,9 +209,39 @@ export const Trips = () => {
     });
 
   return (
-    <div className="mt-6 px-4 ">
-      <Title className="mb-6">Диаграмма по проездам</Title>
-      <div className="flex justify-between items-center">
+    <div className="px-4 mt-6 ">
+      <div className="flex items-center justify-between">
+        <Title className="mb-6">Диаграмма по проездам</Title>
+        <DateRange
+          showFilter
+          filters={
+            <Segmented
+              onChange={handleChangeFormat}
+              options={[
+                {
+                  label: "По часам",
+                  value: "daily",
+                },
+                {
+                  label: "По дням недели",
+                  value: "weekly",
+                },
+                {
+                  label: "По дням месца",
+                  value: "monthly",
+                  disabled: true,
+                },
+                {
+                  label: "По месцам",
+                  value: "yearly",
+                  disabled: true,
+                },
+              ]}
+            />
+          }
+        />
+      </div>
+      <div className="flex items-center justify-between">
         <Tabs
           className="mb-4"
           size="large"
@@ -228,7 +258,7 @@ export const Trips = () => {
           })}
         />
 
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <Segmented
             onChange={(e) => setChartType(e as "line" | "bar")}
             options={[
@@ -247,29 +277,6 @@ export const Trips = () => {
                   </div>
                 ),
                 value: "bar",
-              },
-            ]}
-          />
-          <Segmented
-            onChange={handleChangeFormat}
-            options={[
-              {
-                label: "По часам",
-                value: "daily",
-              },
-              {
-                label: "По дням недели",
-                value: "weekly",
-              },
-              {
-                label: "По дням месца",
-                value: "monthly",
-                disabled: true,
-              },
-              {
-                label: "По месцам",
-                value: "yearly",
-                disabled: true,
               },
             ]}
           />
@@ -296,6 +303,7 @@ export const Trips = () => {
             legend: {},
             tooltip: {
               trigger: "axis",
+              axisPointer: {},
               showContent: true,
               transitionDuration: 1.5,
             },
@@ -349,7 +357,7 @@ export const Trips = () => {
                   itemStyle: {
                     color: color,
                   },
-                  barWidth: dateFormat === "daily" ? 20 : 40,
+                  maxBarWidth: dateFormat === "daily" ? 20 : 40,
                   visualMap: [
                     {
                       show: false,
@@ -434,7 +442,7 @@ export const Trips = () => {
       />
 
       {/* <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">

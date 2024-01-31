@@ -1,6 +1,6 @@
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
-import geoJson from "../../json/regions.json";
+import geoJson from "../../json/uz.json";
 import { useEffect, useRef } from "react";
 
 //@ts-ignore
@@ -11,31 +11,45 @@ interface dataTypes {
   value: number;
 }
 
-const data: dataTypes[] = [
-  { name: "Toshkent sh", value: 4822023 },
-  { name: "Namangan viloyati", value: 731449 },
-  { name: "Toshkent viloyati", value: 6553255 },
-  { name: "Fargʻona viloyati", value: 2949131 },
-  { name: "Andijon viloyati", value: 38041430 },
-  { name: "Sirdaryo viloyati", value: 5187582 },
-  { name: "Jizzax viloyati", value: 3590347 },
-  { name: "Navoiy viloyati", value: 917092 },
-  { name: "Samarqand viloyati", value: 632323 },
-  { name: "Qashqadaryo viloyati", value: 19317568 },
-  { name: "Surxondaryo viloyati", value: 9919945 },
-  { name: "Buxoro viloyati", value: 1392313 },
-  { name: "Xorazm viloyati", value: 1595728 },
-  { name: "Qoraqalpogʻiston Respublikasi", value: 12875255 },
-];
+console.log(geoJson.features.map((f) => f.properties.name));
+
+const data = geoJson.features.map((f) => {
+  return {
+    name: f.properties.name,
+    value:
+      f.properties.name === "Toshkent sh"
+        ? 4822023
+        : f.properties.name === "Yangiyo'l tumani"
+        ? 6000
+        : 0,
+  };
+});
+
+// const data: dataTypes[] = [
+//   { name: "Termez", value: 4822023 },
+//   { name: "Namangan viloyati", value: 731449 },
+//   { name: "Toshkent viloyati", value: 6553255 },
+//   { name: "Fargʻona viloyati", value: 2949131 },
+//   { name: "Andijon viloyati", value: 38041430 },
+//   { name: "Sirdaryo viloyati", value: 5187582 },
+//   { name: "Jizzax viloyati", value: 3590347 },
+//   { name: "Navoiy viloyati", value: 917092 },
+//   { name: "Samarqand viloyati", value: 632323 },
+//   { name: "Qashqadaryo viloyati", value: 19317568 },
+//   { name: "Surxondaryo viloyati", value: 9919945 },
+//   { name: "Buxoro viloyati", value: 1392313 },
+//   { name: "Xorazm viloyati", value: 1595728 },
+//   { name: "Qoraqalpogʻiston Respublikasi", value: 12875255 },
+// ];
 
 const mapOption: echarts.EChartsOption = {
   tooltip: {
-    formatter: (params: any) => {
-      const { data }: { data: dataTypes } = params;
-
-      return `${data.name}:  ${data.value.toLocaleString("ru")} sum`;
-    },
-    transitionDuration: 1,
+    formatter: "{b} : {c} sum",
+    // formatter: (params: any) => {
+    //   const { data }: { data: dataTypes } = params;
+    //   return `${data.name}:  ${data.value.toLocaleString("ru")} sum`;
+    // },
+    // transitionDuration: 1,
   },
 
   series: [
@@ -71,8 +85,9 @@ export const Map = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleWindowResize = () => {
-    if (chartRef.current) {
-      chartRef.current.getEchartsInstance().resize();
+    const chartInstance = chartRef.current?.getEchartsInstance();
+    if (chartInstance) {
+      chartInstance.resize();
     }
   };
 
@@ -93,7 +108,7 @@ export const Map = () => {
         ref={chartRef}
         option={mapOption}
         className="[&_div]:!w-auto [&_div]:!h-auto"
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%", height: "500px" }}
         // onEvents={onEvents}
       />
     </div>
