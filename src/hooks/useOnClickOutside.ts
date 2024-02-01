@@ -8,7 +8,7 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
   handler: Handler,
   buttonRef: RefObject<T>,
-  mouseEvent: "mousedown" | "mouseup" = "mousedown",
+  mouseEvent: "mousedown" | "mouseup" = "mousedown"
 ): void {
   useEventListener(mouseEvent, (event) => {
     const el = ref?.current;
@@ -20,7 +20,6 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
       el.contains(event.target as Node) ||
       buttonEl?.contains(event.target as Node)
     ) {
-      console.log("clicked");
       return;
     }
 

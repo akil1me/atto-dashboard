@@ -55,7 +55,7 @@ export const routes = createBrowserRouter([
             element: <CardBin />,
           },
           {
-            path: "aggreagators",
+            path: "aggregators",
             element: <Aggreagators />,
           },
           {

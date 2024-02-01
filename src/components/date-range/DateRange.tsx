@@ -1,5 +1,5 @@
 import type { TimeRangePickerProps } from "antd";
-import { Button, DatePicker, Drawer } from "antd";
+import { Button, DatePicker, Drawer, Timeline } from "antd";
 import dayjs from "dayjs";
 import { Search } from "lucide-react";
 import { useState } from "react";
@@ -59,7 +59,7 @@ export const DateRange: React.FC<DateRangeProps> = ({
               ...rangePresets,
             ]}
             showTime
-            format="YYYY/MM/DD HH:mm:ss"
+            format="YYYY/MM/DD HH:mm"
           />
 
           <Button icon={<Search size={12} />}>Поиск</Button>

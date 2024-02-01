@@ -1,0 +1,53 @@
+{
+  "translation": {
+    "trips": {
+      "title": "To'lov turlari bo'yicha sayohatlar diagramasi",
+      "time": "Vaqt",
+      "tripsType": {
+        "tariffs": "Tarif rejasi",
+        "qr": "Qr",
+        "bank": "Bank kartasi",
+        "virtual": "Virtual karta",
+        "privilege": "Imtiyoz sayohati",
+        "aggregators": "Aggregatorlar",
+        "cash": "Naqd pul"
+      }
+    },
+    "sidebar": {
+      "main": "Asosiy",
+      "trips": "Sayohatlar",
+      "tariffs": "Tariflar",
+      "bins": "Binlar",
+      "aggregators": "Aggregatorlar",
+      "regions": "Viloyatlar",
+      "ratings": "Reytinglar",
+      "statistics": "Statistika",
+      "metro": "Metro",
+      "bus": "Avtobus",
+      "users": "Foydalanuvchilar",
+      "allDiagrams": "Barcha diagramlar"
+    },
+    "dropdown": {
+      "profile": "Profil",
+      "logout": "Chiqish"
+    },
+    "tariffs": {
+      "title": "Tarif rejasi bo'yicha diagramma",
+      "metro": "Metro",
+      "bus": "Avtobus",
+      "allStatistics": "Tariflar bo'yicha barcha statistika",
+      "day": "kun",
+      "month": "Oylik"
+    },
+    "tabs": {
+      "all": "Barcha",
+      "metro": "Metro",
+      "bus": "Avtobus"
+    },
+    "bin": {
+      "title": "Bin bo'yicha diagramma",
+      "paid": "To'langan",
+      "notPaid": "To'lanmagan"
+    }
+  }
+}

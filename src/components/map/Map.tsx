@@ -25,31 +25,14 @@ const data = geoJson.features.map((f) => {
   };
 });
 
-// const data: dataTypes[] = [
-//   { name: "Termez", value: 4822023 },
-//   { name: "Namangan viloyati", value: 731449 },
-//   { name: "Toshkent viloyati", value: 6553255 },
-//   { name: "Fargʻona viloyati", value: 2949131 },
-//   { name: "Andijon viloyati", value: 38041430 },
-//   { name: "Sirdaryo viloyati", value: 5187582 },
-//   { name: "Jizzax viloyati", value: 3590347 },
-//   { name: "Navoiy viloyati", value: 917092 },
-//   { name: "Samarqand viloyati", value: 632323 },
-//   { name: "Qashqadaryo viloyati", value: 19317568 },
-//   { name: "Surxondaryo viloyati", value: 9919945 },
-//   { name: "Buxoro viloyati", value: 1392313 },
-//   { name: "Xorazm viloyati", value: 1595728 },
-//   { name: "Qoraqalpogʻiston Respublikasi", value: 12875255 },
-// ];
-
 const mapOption: echarts.EChartsOption = {
   tooltip: {
-    formatter: "{b} : {c} sum",
+    formatter: "{b}",
     // formatter: (params: any) => {
     //   const { data }: { data: dataTypes } = params;
     //   return `${data.name}:  ${data.value.toLocaleString("ru")} sum`;
     // },
-    // transitionDuration: 1,
+    transitionDuration: 1,
   },
 
   series: [

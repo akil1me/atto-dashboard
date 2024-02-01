@@ -23,6 +23,7 @@ import UzMap from "../../assets/uz.svg?react";
 import { useAppDispatch } from "../../redux";
 import { loginActions } from "../../redux/login.slice";
 import { Logo } from "../logo/Logo";
+import { useTranslation } from "react-i18next";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -38,135 +39,119 @@ function getItem(
     icon,
     children,
     to,
-    label: children ? label : <Link to={to}>{label}</Link>,
+    label: <Link to={to}>{label}</Link>,
     className,
   } as MenuItem;
 }
-
-const items: MenuItem[] = [
-  getItem(
-    "Главная",
-    "dashboard/main",
-    <LayoutDashboard size={20} strokeWidth={1} />,
-    undefined,
-    "main"
-  ),
-  getItem(
-    "Проезды",
-    "dashboard/trips",
-    <Bus size={20} strokeWidth={1} />,
-    undefined,
-    "trips"
-  ),
-  getItem(
-    "Тариффы",
-    "dashboard/tariffs",
-    <span className="!text-xl">
-      <LiaMoneyCheckAltSolid />
-    </span>,
-    undefined,
-    "tariffs"
-  ),
-  getItem(
-    "Бины",
-    "dashboard/bins",
-    <CreditCard size={20} strokeWidth={1} />,
-    undefined,
-    "bins"
-  ),
-  getItem(
-    "Агграгаторы",
-    "dashboard/aggreagators",
-    <GiCardPick size={20} strokeWidth={1} />,
-    undefined,
-    "aggreagators"
-  ),
-  getItem(
-    "Регионы",
-    "dashboard/regions",
-    <UzMap width={25} height={18} />,
-    undefined,
-    "regions"
-  ),
-  getItem(
-    "Рейтинг",
-    "dashboard/ratings",
-    <FaRegStar size={18} />,
-    undefined,
-    "ratings"
-  ),
-  getItem(
-    "Статистика",
-    "dashboard/statistics",
-    <BarChart3 size={20} strokeWidth={1} />,
-    [
-      getItem(
-        "Метро",
-        "dashboard/statistics/metro",
-        <span className="!text-xs">
-          <TrainFrontTunnel strokeWidth={1} size={20} />
-        </span>,
-        undefined,
-        "statistics/metro"
-      ),
-      getItem(
-        "Автобус",
-        "dashboard/statistics/bus",
-        <BusFront strokeWidth={1} size={20} />,
-        undefined,
-        "statistics/bus"
-      ),
-      getItem(
-        "Пользователи",
-        "dashboard/statistics/users",
-        <HiOutlineUsers strokeWidth={1} size={20} />,
-        undefined,
-        "statistics/users"
-      ),
-    ]
-  ),
-  getItem(
-    "Все диаграммы",
-    "dashboard/all-charts",
-    <FcLineChart strokeWidth={1} size={20} />,
-    undefined,
-    "all-charts"
-  ),
-  // getItem("Navigation One", "sub1", <MailOutlined />, [
-  //   getItem("Option 5", "5"),
-  //   getItem("Option 6", "6"),
-  //   getItem("Option 7", "7"),
-  //   getItem("Option 8", "8"),
-  // ]),
-
-  // getItem("Navigation Two", "sub2", <AppstoreOutlined />, [
-  //   getItem("Option 9", "9"),
-  //   getItem("Option 10", "10"),
-
-  //   getItem("Submenu", "sub3", null, [
-  //     getItem("Option 11", "11"),
-  //     getItem("Option 12", "12"),
-  //   ]),
-  // ]),
-];
 
 const SidebarTest: React.FC = () => {
   const [expanded, setExpanded] = useLocalStorage("expanded", true);
   const [dark] = useLocalStorage("dark", true);
   const { pathname } = useLocation();
-  console.log(pathname.substring(1));
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(loginActions.setToken(null));
   };
 
+  const items: MenuItem[] = [
+    getItem(
+      t("sidebar.main"),
+      "dashboard/main",
+      <LayoutDashboard size={20} strokeWidth={1} />,
+      undefined,
+      "main"
+    ),
+    getItem(
+      t("sidebar.trips"),
+      "dashboard/trips",
+      <Bus size={20} strokeWidth={1} />,
+      undefined,
+      "trips"
+    ),
+    getItem(
+      t("sidebar.tariffs"),
+      "dashboard/tariffs",
+      <span className="!text-xl">
+        <LiaMoneyCheckAltSolid />
+      </span>,
+      undefined,
+      "tariffs"
+    ),
+    getItem(
+      t("sidebar.bins"),
+      "dashboard/bins",
+      <CreditCard size={20} strokeWidth={1} />,
+      undefined,
+      "bins"
+    ),
+    getItem(
+      t("sidebar.aggregators"),
+      "dashboard/aggregators",
+      <GiCardPick size={20} strokeWidth={1} />,
+      undefined,
+      "aggregators"
+    ),
+    getItem(
+      t("sidebar.regions"),
+      "dashboard/regions",
+      <UzMap width={25} height={18} />,
+      undefined,
+      "regions"
+    ),
+    getItem(
+      t("sidebar.ratings"),
+      "dashboard/ratings",
+      <FaRegStar size={18} />,
+      undefined,
+      "ratings"
+    ),
+    getItem(
+      t("sidebar.statistics"),
+      "dashboard/statistics",
+      <BarChart3 size={20} strokeWidth={1} />,
+      [
+        getItem(
+          t("sidebar.metro"),
+          "dashboard/statistics/metro",
+          <span className="!text-xs">
+            <TrainFrontTunnel strokeWidth={1} size={20} />
+          </span>,
+          undefined,
+          "statistics/metro"
+        ),
+        getItem(
+          t("sidebar.bus"),
+          "dashboard/statistics/bus",
+          <BusFront strokeWidth={1} size={20} />,
+          undefined,
+          "statistics/bus"
+        ),
+        getItem(
+          t("sidebar.users"),
+          "dashboard/statistics/users",
+          <HiOutlineUsers strokeWidth={1} size={20} />,
+          undefined,
+          "statistics/users"
+        ),
+      ]
+    ),
+    getItem(
+      t("sidebar.allDiagrams"),
+      "dashboard/all-charts",
+      <FcLineChart strokeWidth={1} size={20} />,
+      undefined,
+      "all-charts"
+    ),
+  ];
+
   return (
     <div
-      className={`flex-shrink-0 fixed flex flex-col left-0 top-0 shadow-sm float-right  bottom-0 z-50 bg-[var(--bgsidebar)] transition-all duration-500 w-full ${
+      className={`flex flex-shrink-0 fixed  flex-col left-0 top-0 shadow-sm float-right bottom-0 z-50 bg-[var(--bgsidebar)] transition-all duration-500 w-full ${
         expanded ? "max-w-[290px]" : "max-w-[70px]"
       }`}
     >
-      <div className="p-4 pb-2  pt-5 flex justify-between items-center mb-6">
+      <div className="flex items-center justify-between p-4 pt-5 pb-2 mb-6">
         <Logo open={expanded} dark={dark} />
         <button
           onClick={() => setExpanded((curr) => !curr)}
@@ -177,7 +162,7 @@ const SidebarTest: React.FC = () => {
       </div>
       <div className="flex-1 overflow-y-auto">
         <Menu
-          className="bg-transparent w-full transition-all duration-500"
+          className="w-full transition-all duration-500 bg-transparent"
           defaultSelectedKeys={[
             pathname.substring(1) === "dashboard"
               ? "dashboard/main"

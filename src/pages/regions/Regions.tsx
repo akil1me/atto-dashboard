@@ -3,11 +3,22 @@ import { SegmentedValue } from "antd/es/segmented";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 import { BarChart } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import UzMap from "../../assets/uz.svg?react";
 import { Title } from "../../components";
 import geoJson from "../../json/uz.json";
+
+interface GeoJSONFeature<G> {
+  type: "Feature";
+  id?: string | number;
+  properties: {
+    name?: string;
+    cp?: number[];
+    [key: string]: any;
+  };
+  geometry: G;
+}
 
 echarts.registerMap("uzb", {
   //@ts-ignore
@@ -153,7 +164,7 @@ const barOpts = {
   animationEasing: "elasticOut",
 } as echarts.EChartsOption;
 
-export const Regions = () => {
+export const Regions = memo(() => {
   const chartRef = useRef<ReactEcharts | null>(null);
   const [dark] = useLocalStorage("dark", true);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -173,6 +184,14 @@ export const Regions = () => {
     return () => {
       if (containerRef.current) resizeObserver.unobserve(containerRef.current);
     };
+  }, []);
+
+  useEffect(() => {
+    if (chartRef.current) {
+      chartRef.current.getEchartsInstance().on("click", (params) => {
+        console.log("params", params);
+      });
+    }
   }, []);
 
   const handleChangeChart = (e: SegmentedValue) => {
@@ -217,8 +236,7 @@ export const Regions = () => {
         notMerge={true}
         className="[&_div]:!w-auto [&_div]:!h-auto mt-7"
         style={{ width: "100%", height: "600px" }}
-        // onEvents={onEvents}
       />
     </div>
   );
-};
+});

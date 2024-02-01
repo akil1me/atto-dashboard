@@ -1,4 +1,4 @@
-import { Segmented, Tabs } from "antd";
+import { Segmented } from "antd";
 import { SegmentedValue } from "antd/es/segmented";
 import dayjs from "dayjs";
 import dayjsRandom from "dayjs-random";
@@ -6,15 +6,12 @@ import "dayjs/locale/ru";
 import durtion from "dayjs/plugin/duration";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
-import {
-  BarChart,
-  BusFront,
-  LineChartIcon,
-  TrainFrontTunnel,
-} from "lucide-react";
+import { BarChart, LineChartIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocalStorage } from "usehooks-ts";
 import { DateRange, Title } from "../../components";
+import { TabsUI } from "../../components/ui/tabs-ui";
 import { useChangeColor } from "../../hooks";
 dayjs.locale("ru");
 dayjs.extend(dayjsRandom);
@@ -33,74 +30,20 @@ const hexColors = [
   "#14FFF7", // Светло-серый
 ].reverse();
 
-interface DataType {
+type DataType = {
   product?: string;
-  Всего?: number;
-  "Тарифный план": number;
-  Qr: number;
-  "Траснпорная карта": number;
-  "Банковская карта": number;
-  "Виртиальная карта": number;
-  "Льготные поездки": number;
-  Аггрегаторы: number;
-  "Наличной оплате": number;
-}
+} & {
+  [key: string]: number | string;
+};
 
-type DataTypePie =
-  | "product"
-  | "Тарифный план"
-  | "Qr"
-  | "Траснпорная карта"
-  | "Банковская карта"
-  | "Виртиальная карта"
-  | "Льготные поездки"
-  | "Аггрегаторы"
-  | "Наличной оплате";
-
-// interface DataType {
-//   key: React.Key;
-//   name: string | React.ReactNode;
-//   chinese: number;
-//   math: number;
-// }
-
-const items = [
-  {
-    text: "Общий",
-    icon: (
-      <div className="inline-block align-top">
-        <TrainFrontTunnel />
-      </div>
-    ),
-    value: "all",
-  },
-  {
-    text: "Метро",
-    icon: (
-      <div className="inline-block align-top">
-        <TrainFrontTunnel />
-      </div>
-    ),
-    value: "metro",
-  },
-  {
-    text: "Автобус",
-    icon: (
-      <div className="inline-block align-top">
-        <BusFront />
-      </div>
-    ),
-    value: "bus",
-  },
-];
+type DataTypePie = keyof DataType;
 
 export const tripsDataJson = {};
-// const echartsRef = useRef();
 
 const getHours = () => {
   const result = [];
   for (let i = 0; i < 24; i++) {
-    result.push(i + ":00"); // Put loop counter into array with "00" next to it
+    result.push(i + ":00");
   }
 
   return result;
@@ -113,7 +56,7 @@ const dateDay: DataType[] = getHours().map((hour) => {
     Qr: Math.floor(Math.random() * 100),
     "Траснпорная карта": Math.floor(Math.random() * 100),
     "Банковская карта": Math.floor(Math.random() * 300),
-    "Виртиальная карта": Math.floor(Math.random() * 100),
+    "Виртуальная карта": Math.floor(Math.random() * 100),
     "Льготные поездки": Math.floor(Math.random() * 100),
     Аггрегаторы: Math.floor(Math.random() * 100),
     "Наличной оплате": Math.floor(Math.random() * 100),
@@ -133,8 +76,6 @@ const getDays = () => {
   return weekdaysArray;
 };
 
-// console.log(dataWeekly());
-
 const dataWeekly: DataType[] = getDays().map((day) => {
   return {
     product: day,
@@ -142,14 +83,12 @@ const dataWeekly: DataType[] = getDays().map((day) => {
     Qr: Math.floor(Math.random() * 1000),
     "Траснпорная карта": Math.floor(Math.random() * 1000),
     "Банковская карта": Math.floor(Math.random() * 1500),
-    "Виртиальная карта": Math.floor(Math.random() * 1000),
+    "Виртуальная карта": Math.floor(Math.random() * 1000),
     "Льготные поездки": Math.floor(Math.random() * 1000),
     Аггрегаторы: Math.floor(Math.random() * 1000),
     "Наличной оплате": Math.floor(Math.random() * 1000),
   };
 });
-
-console.log(dataWeekly);
 
 export const Trips = () => {
   const echartsRef = useRef<ReactEcharts | null>(null);
@@ -160,6 +99,7 @@ export const Trips = () => {
   const [chartType, setChartType] = useState<"bar" | "line">("line");
   const [dateFormat, setDateFormat] = useState("daily");
   const pieColor = useChangeColor();
+  const { t } = useTranslation();
 
   const hanldeChange = (evt: unknown) => {
     const index = evt as { dataIndex?: number };
@@ -194,7 +134,7 @@ export const Trips = () => {
       (item) => typeof item === "number"
     );
 
-    let total = itemNums.reduce((acc, curr) => acc + curr, 0);
+    let total = itemNums.reduce((acc, curr) => Number(acc) + Number(curr), 0);
 
     return { ...item, Total: chartType === "line" ? total : null };
   });
@@ -211,7 +151,7 @@ export const Trips = () => {
   return (
     <div className="px-4 mt-6 ">
       <div className="flex items-center justify-between">
-        <Title className="mb-6">Диаграмма по проездам</Title>
+        <Title className="mb-6">{t("trips.title")}</Title>
         <DateRange
           showFilter
           filters={
@@ -242,21 +182,7 @@ export const Trips = () => {
         />
       </div>
       <div className="flex items-center justify-between">
-        <Tabs
-          className="mb-4"
-          size="large"
-          defaultActiveKey="1"
-          type="line"
-          items={items.map((item, i) => {
-            const id = String(i + 1);
-            return {
-              key: id,
-              label: item.text,
-
-              // icon: item.icon,
-            };
-          })}
-        />
+        <TabsUI />
 
         <div className="flex items-center gap-2">
           <Segmented

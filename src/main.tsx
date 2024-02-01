@@ -11,6 +11,8 @@ import toast, { ToastBar, Toaster } from "react-hot-toast";
 import { ConfigProvider } from "antd";
 import { useLocalStorage } from "usehooks-ts";
 
+import "./i18n";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Suspense fallback={<div>loading...</div>}>
     <Provider store={store}>

@@ -1,0 +1,53 @@
+{
+  "translation": {
+    "trips": {
+      "title": "Trips by payment type diagram",
+      "time": "Time",
+      "tripsType": {
+        "tariffs": "Tariff plan",
+        "qr": "Qr",
+        "bank": "Bank card",
+        "virtual": "Virtual card",
+        "privilege": "Privilege trips",
+        "aggregators": "Aggregators",
+        "cash": "Cash payment"
+      }
+    },
+    "sidebar": {
+      "main": "Main",
+      "trips": "Trips",
+      "tariffs": "Tariffs",
+      "bins": "Bins",
+      "aggregators": "Aggregators",
+      "regions": "Regions",
+      "ratings": "Ratings",
+      "statistics": "Statistics",
+      "metro": "Metro",
+      "bus": "Bus",
+      "users": "Users",
+      "allDiagrams": "All diagrams"
+    },
+    "dropdown": {
+      "profile": "Profile",
+      "logout": "Logout"
+    },
+    "tariffs": {
+      "title": "Diagram of tariff plans",
+      "metro": "Metro",
+      "bus": "Bus",
+      "allStatistics": "All statistics of tariff plans",
+      "day": "day",
+      "month": "Month"
+    },
+    "tabs": {
+      "all": "All",
+      "metro": "Metro",
+      "bus": "Bus"
+    },
+    "bin": {
+      "title": "Diagram of bins",
+      "paid": "Paid",
+      "notPaid": "Not paid"
+    }
+  }
+}

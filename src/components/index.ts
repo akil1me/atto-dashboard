@@ -7,3 +7,5 @@ export * from "./cards/StatisticsCard";
 export * from "./cards/ChartsCard";
 export * from "./title/Title";
 export * from "./date-range/DateRange";
+export * from "./lang-changer/LangChanger";
+export * from "./ui/tab-items";

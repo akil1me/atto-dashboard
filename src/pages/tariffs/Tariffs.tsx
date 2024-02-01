@@ -5,6 +5,7 @@ import { useLocalStorage } from "usehooks-ts";
 import { DateRange, Title } from "../../components";
 import { useChangeColor } from "../../hooks";
 import { fakeData } from "./fakeData";
+import { useTranslation } from "react-i18next";
 
 type TariffsTypes =
   | "1"
@@ -50,37 +51,6 @@ const data = [
 
 const getTariffs = () => Object.keys(fakeData.metro.AVM);
 
-const newData = getTariffs().map((item) => {
-  const tariff = item as TariffsTypes;
-  return {
-    product: isNaN(+tariff) ? "Месяц" : tariff + " день",
-    AVM: fakeData.metro.AVM[tariff],
-    "O`M": fakeData.metro["O`M"][tariff],
-    TM: fakeData.metro.TM[tariff],
-    "\u041B\u044C\u0433\u043E\u0442\u043D\u044B\u0439 Mintrans":
-      fakeData.metro["Льготный Mintrans"][tariff],
-  };
-});
-
-const getOptimalData = () => {
-  const bus = fakeData.bus;
-  const arr = [];
-  for (let key in bus) {
-    const total = Object.values(bus[key as TariffsData]).reduce(
-      (acc, curr) => Number(acc) + Number(curr),
-      0
-    );
-    if ((total as number) > 1) {
-      arr.push({
-        name: key,
-        data: bus[key as TariffsData],
-      });
-    }
-  }
-  return arr;
-};
-console.log(newData);
-
 // const pie
 
 export const Tariffs = () => {
@@ -89,6 +59,7 @@ export const Tariffs = () => {
   const busRef = useRef<ReactEcharts | null>(null);
   const [busIndex, setBusIndex] = useState(10);
   const pieColor = useChangeColor();
+  const { t } = useTranslation();
 
   const hanldeChange = (evt: unknown) => {
     const index = evt as { dataIndex?: number };
@@ -106,6 +77,38 @@ export const Tariffs = () => {
       });
     }
   }, []);
+
+  const newData = getTariffs().map((item) => {
+    const tariff = item as TariffsTypes;
+    return {
+      product: isNaN(+tariff)
+        ? t("tariffs.month")
+        : tariff + ` ${t("tariffs.day")}`,
+      AVM: fakeData.metro.AVM[tariff],
+      "O`M": fakeData.metro["O`M"][tariff],
+      TM: fakeData.metro.TM[tariff],
+      "\u041B\u044C\u0433\u043E\u0442\u043D\u044B\u0439 Mintrans":
+        fakeData.metro["Льготный Mintrans"][tariff],
+    };
+  });
+
+  const getOptimalData = () => {
+    const bus = fakeData.bus;
+    const arr = [];
+    for (let key in bus) {
+      const total = Object.values(bus[key as TariffsData]).reduce(
+        (acc, curr) => Number(acc) + Number(curr),
+        0
+      );
+      if ((total as number) > 1) {
+        arr.push({
+          name: key,
+          data: bus[key as TariffsData],
+        });
+      }
+    }
+    return arr;
+  };
 
   useEffect(() => {
     if (busRef.current) {
@@ -135,7 +138,7 @@ export const Tariffs = () => {
       ({
         backgroundColor: "",
         title: {
-          text: "Метро",
+          text: t("tariffs.metro"),
         },
 
         tooltip: {
@@ -255,12 +258,12 @@ export const Tariffs = () => {
   // console.log(pieChartData);
 
   return (
-    <div className="mt-6 px-4">
-      <div className="flex justify-between items-center">
-        <Title className="mb-10">Диаграмма по тарифным планам </Title>
+    <div className="px-4 mt-6">
+      <div className="flex items-center justify-between">
+        <Title className="mb-10">{t("tariffs.title")}</Title>
         <DateRange />
       </div>
-      <div className="flex items-center gap-5 flex-col">
+      <div className="flex flex-col items-center gap-5">
         <ReactEcharts
           ref={busRef}
           theme={dark ? "dark" : ""}
@@ -285,7 +288,7 @@ export const Tariffs = () => {
             {
               backgroundColor: "",
               title: {
-                text: "Автобус",
+                text: t("tariffs.bus"),
               },
 
               tooltip: {
@@ -373,7 +376,7 @@ export const Tariffs = () => {
               trigger: "axis",
             },
             title: {
-              text: "Общая статистика тарифных планов",
+              text: t("tariffs.allStatistics"),
             },
             legend: {},
 

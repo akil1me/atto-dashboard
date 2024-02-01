@@ -1,77 +1,23 @@
-import { Segmented, Tabs } from "antd";
 import { EChartsOption } from "echarts";
 import ReactEcharts from "echarts-for-react";
-import { BusFront, TrainFrontTunnel } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocalStorage } from "usehooks-ts";
 import { Title } from "../../components";
-
-const items = [
-  {
-    text: "Общий",
-    icon: (
-      <div className="inline-block align-top">
-        <TrainFrontTunnel />
-      </div>
-    ),
-    value: "all",
-  },
-  {
-    text: "Метро",
-    icon: (
-      <div className="inline-block align-top">
-        <TrainFrontTunnel />
-      </div>
-    ),
-    value: "metro",
-  },
-  {
-    text: "Автобус",
-    icon: (
-      <div className="inline-block align-top">
-        <BusFront />
-      </div>
-    ),
-    value: "bus",
-  },
-];
+import { SegmentedCount } from "../../components/ui/segmented-count";
+import { TabsUI } from "../../components/ui/tabs-ui";
 
 export const CardBin = () => {
   const [dark] = useLocalStorage("dark", true);
+  const { t } = useTranslation();
   const [segment, setSegment] = useState<"count" | "amount">("count");
 
   return (
-    <div className="py-4 px-4 w-full">
-      <Title>Диаграмма по бинам</Title>
-      <div className="flex justify-between items-center">
-        <Tabs
-          className="mb-4"
-          size="large"
-          defaultActiveKey="1"
-          type="line"
-          items={items.map((item, i) => {
-            const id = String(i + 1);
-            return {
-              key: id,
-              label: item.text,
-
-              // icon: item.icon,
-            };
-          })}
-        />
-        <Segmented
-          onChange={(e) => setSegment(e as "count" | "amount")}
-          options={[
-            {
-              label: "Количество",
-              value: "count",
-            },
-            {
-              label: "Сумма",
-              value: "amount",
-            },
-          ]}
-        />
+    <div className="w-full px-4 py-4">
+      <Title>{t("bin.title")}</Title>
+      <div className="flex items-center justify-between">
+        <TabsUI />
+        <SegmentedCount setSegment={setSegment} />
       </div>
 
       <ReactEcharts
@@ -118,7 +64,7 @@ export const CardBin = () => {
             ],
             series: [
               {
-                name: "Оплачено",
+                name: t("bin.paid"),
                 type: "bar",
                 stack: "Total",
                 label: {
@@ -145,7 +91,7 @@ export const CardBin = () => {
                 animationEasingUpdate: "elasticOut",
               },
               {
-                name: "Не оплачено",
+                name: t("bin.notPaid"),
                 type: "bar",
                 stack: "Total",
                 label: {

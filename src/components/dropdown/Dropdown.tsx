@@ -1,42 +1,42 @@
-import { Radio } from "antd";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { IconType } from "react-icons";
 import { FiGlobe, FiLogOut, FiUser } from "react-icons/fi";
-import { LanguageType } from "../../@types";
+import { LangChanger } from "../lang-changer/LangChanger";
 import { useOnClickOutside } from "../../hooks";
-import "/node_modules/flag-icons/css/flag-icons.min.css";
 import { useAppDispatch } from "../../redux";
 import { loginActions } from "../../redux/login.slice";
-
-export const languages: LanguageType[] = ["uz", "ru", "en"];
+import "/node_modules/flag-icons/css/flag-icons.min.css";
+import { useTranslation } from "react-i18next";
 
 const StaggeredDropDown = () => {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+
   const handleClickOutside = () => {
-    setOpen(false);
-    // console.log("handleClickOutside");
+    setIsOpen(false);
   };
 
-  const handleClickInside = () => {
-    setOpen(!open);
-    // console.log("handleClickInside");
+  const handleToggleDropdown = () => {
+    setIsOpen(!isOpen);
   };
 
   const handleLogout = () => {
     dispatch(loginActions.setToken(null));
   };
-  useOnClickOutside(ref, handleClickOutside, buttonRef);
+
+  useOnClickOutside(dropdownRef, handleClickOutside, buttonRef);
+
   return (
-    <div className=" flex items-center justify-center">
-      <motion.div animate={open ? "open" : "closed"} className="relative">
+    <div className="flex items-center justify-center">
+      <motion.div animate={isOpen ? "open" : "closed"} className="relative">
         <motion.button
           ref={buttonRef}
-          onClick={handleClickInside}
-          className="flex items-center relative z-[21] gap-2 px-3 py-2 rounded-md text-indigo-50  transition-colors"
+          onClick={handleToggleDropdown}
+          className="flex items-center relative z-[21] gap-2 px-3 py-2 rounded-md text-indigo-50 transition-colors"
         >
           <img
             className="w-10 h-10 rounded-full"
@@ -46,46 +46,30 @@ const StaggeredDropDown = () => {
         </motion.button>
 
         <motion.ul
-          ref={ref}
+          ref={dropdownRef}
           initial={wrapperVariants.closed}
           variants={wrapperVariants}
-          // style={{ originY: "top" }}
           className="flex flex-col gap-2 p-2 rounded-lg border border-slate-700 bg-[var(--bgsidebar)] shadow-xl absolute top-14 min-w-[200px] w-full max-w-xs right-0 z-20 overflow-hidden"
         >
-          <Option setOpen={setOpen} Icon={FiUser} text="Профиль" />
-
           <Option
-            setOpen={setOpen}
-            Icon={FiGlobe}
-            text={
-              <Radio.Group
-                buttonStyle="outline"
-                defaultValue={"uz"}
-                size="small"
-              >
-                {languages.map((lang, index) => (
-                  <Radio.Button key={index} value={lang}>
-                    <span
-                      className={`fi fi-${lang === "en" ? "gb" : lang}`}
-                    ></span>
-                  </Radio.Button>
-                ))}
-              </Radio.Group>
-            }
+            setOpen={setIsOpen}
+            Icon={FiUser}
+            text={t("dropdown.profile")}
           />
 
+          <Option setOpen={setIsOpen} Icon={FiGlobe} text={<LangChanger />} />
+
           <Option
-            setOpen={setOpen}
+            setOpen={setIsOpen}
             Icon={FiLogOut}
             handleLogout={handleLogout}
-            text={"Выйти"}
+            text={t("dropdown.logout")}
           />
         </motion.ul>
       </motion.div>
     </div>
   );
 };
-
 const Option = ({
   text,
   Icon,
@@ -100,7 +84,7 @@ const Option = ({
   return (
     <motion.li
       onClick={handleLogout}
-      className="flex items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-[var(--bghoverdropdown)] text-slate-700 hover:text-indigo-500 transition-colors cursor-pointer"
+      className="flex items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-[var(--bghoverdropdown)] hover:text-green transition-colors cursor-pointer"
     >
       <motion.span>
         <Icon />
