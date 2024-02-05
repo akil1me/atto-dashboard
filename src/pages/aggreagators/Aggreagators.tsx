@@ -5,6 +5,7 @@ import { useLocalStorage } from "usehooks-ts";
 import { Title } from "../../components";
 import { useChangeColor } from "../../hooks";
 import { genData } from "./aggregator-data";
+import { useTranslation } from "react-i18next";
 
 const data = genData();
 console.log(data);
@@ -12,6 +13,7 @@ console.log(data);
 export const Aggreagators = () => {
   const [dark] = useLocalStorage("dark", true);
   const pieColor = useChangeColor();
+  const { t } = useTranslation();
 
   const pieOpts: EChartsOption = useMemo(
     () => ({
@@ -68,8 +70,8 @@ export const Aggreagators = () => {
   );
 
   return (
-    <div className="p-4 w-full">
-      <Title>Диграмма по Аггрегаторам</Title>
+    <div className="w-full p-4">
+      <Title>{t("aggregators.title")}</Title>
       <ReactEcharts
         theme={dark ? "dark" : ""}
         className="[&_div]:!w-auto [&_div]:!h-auto mb-14"

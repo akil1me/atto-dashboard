@@ -5,6 +5,7 @@ import ReactEcharts from "echarts-for-react";
 import { useLocalStorage } from "usehooks-ts";
 import { Title } from "..";
 import { ratingData } from "./ratingBus";
+import { useTranslation } from "react-i18next";
 
 let category = [];
 let lineData = [];
@@ -89,9 +90,10 @@ const option: echarts.EChartsOption = {
 
 export const Ratings = () => {
   const [dark] = useLocalStorage("dark", true);
+  const { t } = useTranslation();
   return (
     <div className="p-4">
-      <Title>Рейтинг автобусов по автопарком</Title>
+      <Title>{t("ratings.title")}</Title>
       <ReactEcharts
         theme={dark ? "dark" : ""}
         className="[&_div]:!w-auto [&_div]:!h-auto mb-14 mt-4"

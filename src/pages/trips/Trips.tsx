@@ -3,17 +3,20 @@ import { SegmentedValue } from "antd/es/segmented";
 import dayjs from "dayjs";
 import dayjsRandom from "dayjs-random";
 import "dayjs/locale/ru";
+import "dayjs/locale/uz-latn";
+import "dayjs/locale/en";
+
 import durtion from "dayjs/plugin/duration";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 import { BarChart, LineChartIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocalStorage } from "usehooks-ts";
 import { DateRange, Title } from "../../components";
 import { TabsUI } from "../../components/ui/tabs-ui";
 import { useChangeColor } from "../../hooks";
-dayjs.locale("ru");
+
 dayjs.extend(dayjsRandom);
 dayjs.extend(durtion);
 // console.log();
@@ -63,36 +66,10 @@ const dateDay: DataType[] = getHours().map((hour) => {
   };
 });
 
-const getDays = () => {
-  const weekdaysArray = [];
-
-  for (let i = 1; i <= 7; i++) {
-    const dayName = dayjs()
-      .day(i % 7)
-      .format("dddd"); // Используем i % 7, чтобы циклически обходить дни недели
-    weekdaysArray.push(dayName.slice(0, 1).toUpperCase() + dayName.slice(1));
-  }
-
-  return weekdaysArray;
-};
-
-const dataWeekly: DataType[] = getDays().map((day) => {
-  return {
-    product: day,
-    "Тарифный план": Math.floor(Math.random() * 1000),
-    Qr: Math.floor(Math.random() * 1000),
-    "Траснпорная карта": Math.floor(Math.random() * 1000),
-    "Банковская карта": Math.floor(Math.random() * 1500),
-    "Виртуальная карта": Math.floor(Math.random() * 1000),
-    "Льготные поездки": Math.floor(Math.random() * 1000),
-    Аггрегаторы: Math.floor(Math.random() * 1000),
-    "Наличной оплате": Math.floor(Math.random() * 1000),
-  };
-});
-
 export const Trips = () => {
   const echartsRef = useRef<ReactEcharts | null>(null);
   const [dark] = useLocalStorage("dark", true);
+  const [lang] = useLocalStorage("lang", "ru");
   // const {} = useGetData("operator/dashboard/metro/stations", ["metro"]);
   const [hour, setHour] = useState(6);
   const [data, setData] = useState(dateDay);
@@ -118,6 +95,33 @@ export const Trips = () => {
       };
     }
   }, []);
+
+  const getDays = useCallback(() => {
+    const weekdaysArray = [];
+    dayjs.locale(lang === "uz" ? "uz-latn" : lang);
+    for (let i = 1; i <= 7; i++) {
+      const dayName = dayjs()
+        .day(i % 7)
+        .format("dddd"); // Используем i % 7, чтобы циклически обходить дни недели
+      weekdaysArray.push(dayName.slice(0, 1).toUpperCase() + dayName.slice(1));
+    }
+
+    return weekdaysArray;
+  }, [lang]);
+
+  const dataWeekly: DataType[] = getDays().map((day) => {
+    return {
+      product: day,
+      "Тарифный план": Math.floor(Math.random() * 1000),
+      Qr: Math.floor(Math.random() * 1000),
+      "Траснпорная карта": Math.floor(Math.random() * 1000),
+      "Банковская карта": Math.floor(Math.random() * 1500),
+      "Виртуальная карта": Math.floor(Math.random() * 1000),
+      "Льготные поездки": Math.floor(Math.random() * 1000),
+      Аггрегаторы: Math.floor(Math.random() * 1000),
+      "Наличной оплате": Math.floor(Math.random() * 1000),
+    };
+  });
 
   const handleChangeFormat = (e: SegmentedValue) => {
     setHour(6);
@@ -219,7 +223,7 @@ export const Trips = () => {
             title: {
               text:
                 dateFormat === "daily"
-                  ? `Время ${hour}:00 - ${hour}:59`
+                  ? `${t("trips.time")} ${hour}:00 - ${hour}:59`
                   : getDays()[hour],
               left: 0,
               right: 0,
@@ -228,8 +232,9 @@ export const Trips = () => {
 
             legend: {},
             tooltip: {
-              trigger: "axis",
+              trigger: chartType === "bar" ? "item" : "axis",
               axisPointer: {},
+              order: "valueDesc",
               showContent: true,
               transitionDuration: 1.5,
             },

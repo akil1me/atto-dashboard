@@ -7,6 +7,8 @@ import { Title } from "../../components";
 import { useChangeColor } from "../../hooks";
 import { busData } from "../../json";
 import { BarChart, Network } from "lucide-react";
+import { SegmentedCount } from "../../components/ui/segmented-count";
+import { useTranslation } from "react-i18next";
 
 const dataChanger = (val: "amount" | "count") => {
   return busData.bus.children.map((item) => {
@@ -32,7 +34,7 @@ export const StatisticsBus = () => {
   const echartsRef = useRef<ReactEcharts | null>(null);
   const [segment, setSegment] = useState<"count" | "amount">("count");
   const [chartType, setChartType] = useState<"tree" | "bar">("tree");
-
+  const { t } = useTranslation();
   const treeColor = useChangeColor();
 
   const handleChange = (values: SegmentedValue) => {
@@ -182,10 +184,8 @@ export const StatisticsBus = () => {
 
   return (
     <div className="w-full">
-      <div className="my-4 flex justify-between items-center">
-        <Title>
-          Транзакции автобусов по {segment === "count" ? "количеству" : "сумме"}
-        </Title>
+      <div className="flex items-center justify-between my-4">
+        <Title>{t("statistics.bus.title")}</Title>
 
         <div className="flex items-center gap-3">
           <Segmented
@@ -202,7 +202,7 @@ export const StatisticsBus = () => {
               },
               {
                 label: (
-                  <div className="flex items-center gap-3 relative">
+                  <div className="relative flex items-center gap-3">
                     <BarChart size={20} strokeWidth={1} />
                   </div>
                 ),
@@ -211,19 +211,7 @@ export const StatisticsBus = () => {
             ]}
           />
 
-          <Segmented
-            onChange={handleChange}
-            options={[
-              {
-                label: "Количество",
-                value: "count",
-              },
-              {
-                label: "Сумма",
-                value: "amount",
-              },
-            ]}
-          />
+          <SegmentedCount setSegment={setSegment} />
         </div>
       </div>
       <ReactEcharts

@@ -48,6 +48,32 @@
       "title": "Bin bo'yicha diagramma",
       "paid": "To'langan",
       "notPaid": "To'lanmagan"
+    },
+    "segmented": {
+      "count": "Soni",
+      "amount": "Summa"
+    },
+    "aggregators": {
+      "title": "Aggregator bo'yicha diagramma"
+    },
+    "regions": {
+      "title": "Viloyat bo'yicha to'lovlar"
+    },
+    "ratings": {
+      "title": "Abtobus reytinglari bo'yicha diagramma"
+    },
+    "statistics": {
+      "metro": {
+        "title": "Metro liniyansi bo'yicha statistika"
+      },
+      "bus": {
+        "title": "Avtobus bo'yicha statistika"
+      },
+      "users": {
+        "title": "Foydalanuvchilar soni",
+        "yearly": "Foydalanuvchilar bo'yicha yillik statistika",
+        "monthly": "Foydalanuvchilar bo'yicha oylik statistika"
+      }
     }
   }
 }

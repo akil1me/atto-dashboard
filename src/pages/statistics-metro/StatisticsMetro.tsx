@@ -8,6 +8,8 @@ import { useLocalStorage } from "usehooks-ts";
 import { DateRange, Title } from "../../components";
 import { useChangeColor } from "../../hooks";
 import { stations } from "../../json/stations";
+import { SegmentedCount } from "../../components/ui/segmented-count";
+import { useTranslation } from "react-i18next";
 
 const dataSun = stations.map((station) => {
   return {
@@ -98,6 +100,7 @@ export const StatisticsMetro = () => {
   const [dark] = useLocalStorage("dark", true);
   const echartsRef = useRef<ReactEcharts | null>(null);
   const [segment, setSegment] = useState<"count" | "amount">("count");
+  const { t } = useTranslation();
 
   const pieColor = useChangeColor();
 
@@ -160,12 +163,12 @@ export const StatisticsMetro = () => {
 
   return (
     <div className="w-full px-4">
-      <div className="flex justify-between items-center">
-        <Title>Статискика в метро по линиям</Title>
+      <div className="flex items-center justify-between">
+        <Title>{t("statistics.metro.title")}</Title>
 
         <DateRange />
       </div>
-      <div className="my-4 flex justify-end items-center">
+      <div className="flex items-center justify-end my-4">
         <div className="flex items-center gap-4">
           <Segmented
             onChange={handleChangeChart}
@@ -189,19 +192,7 @@ export const StatisticsMetro = () => {
             ]}
           />
 
-          <Segmented
-            onChange={(e) => setSegment(e as "count" | "amount")}
-            options={[
-              {
-                label: "Количество",
-                value: "count",
-              },
-              {
-                label: "Сумма",
-                value: "amount",
-              },
-            ]}
-          />
+          <SegmentedCount setSegment={setSegment} />
         </div>
       </div>
       <ReactEcharts

@@ -8,6 +8,7 @@ import { useLocalStorage } from "usehooks-ts";
 import UzMap from "../../assets/uz.svg?react";
 import { Title } from "../../components";
 import geoJson from "../../json/uz.json";
+import { useTranslation } from "react-i18next";
 
 interface GeoJSONFeature<G> {
   type: "Feature";
@@ -33,7 +34,7 @@ interface dataTypes {
 const data = [
   {
     name: "Toshkent sh",
-    value: 182220223,
+    value: 482220223,
     // itemStyle: {
     //   areaColor: "red",
     // },
@@ -51,7 +52,7 @@ const data = [
   { name: "Sirdaryo viloyati", value: 518722 },
   { name: "Jizzax viloyati", value: 0 },
   { name: "Navoiy viloyati", value: 917082 },
-  { name: "Samarqand viloyati", value: 9323023 },
+  { name: "Samarqand viloyati", value: 2323023 },
   { name: "Qashqadaryo viloyati", value: 1931568 },
   { name: "Surxondaryo viloyati", value: 0 },
   { name: "Buxoro viloyati", value: 133423 },
@@ -168,6 +169,7 @@ export const Regions = memo(() => {
   const chartRef = useRef<ReactEcharts | null>(null);
   const [dark] = useLocalStorage("dark", true);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const [chartType, setChartType] = useState("map");
   const handleWindowResize = () => {
@@ -202,10 +204,9 @@ export const Regions = memo(() => {
     () => (chartType === "map" ? mapOption : barOpts),
     [chartType]
   );
-
   return (
     <div ref={containerRef}>
-      <Title>Очет по регионам</Title>
+      <Title>{t("regions.title")}</Title>
       <div className="relative flex items-center justify-end mt-10">
         <Segmented
           onChange={handleChangeChart}

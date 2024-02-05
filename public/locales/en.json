@@ -48,6 +48,32 @@
       "title": "Diagram of bins",
       "paid": "Paid",
       "notPaid": "Not paid"
+    },
+    "segmented": {
+      "count": "Count",
+      "amount": "Amount"
+    },
+    "aggregators": {
+      "title": "Diagram of aggregators"
+    },
+    "regions": {
+      "title": "Total income by regions"
+    },
+    "ratings": {
+      "title": "Rating of buses by parks"
+    },
+    "statistics": {
+      "metro": {
+        "title": "Statistics of metro lines"
+      },
+      "bus": {
+        "title": "Statistics of buses by parks"
+      },
+      "users": {
+        "title": "Number of registered users",
+        "yearly": "Registered users by year",
+        "monthly": "Registered users by month"
+      }
     }
   }
 }

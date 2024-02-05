@@ -3,6 +3,11 @@ import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 import { useLocalStorage } from "usehooks-ts";
 import { Title } from "../../components";
+import "dayjs/locale/ru";
+import "dayjs/locale/uz-latn";
+import "dayjs/locale/en";
+import { useTranslation } from "react-i18next";
+
 const data = [
   ["2000-01-05", 116],
   ["2000-02-06", 129],
@@ -18,21 +23,14 @@ const data = [
   ["2000-12-16", 139],
 ];
 
-const newData = data.map(([date, value]) => {
-  const monthName = dayjs(date).format("MMMM"); // 'MMMM' gives the full month name
-  return [monthName, value];
-});
-
-const dateList = newData.map(function (item) {
-  return item[0];
-});
-const valueList = newData.map(function (item) {
-  return +item[1] * 1000;
-});
-const option: echarts.EChartsOption = {
+const getOption = (
+  dateList: (string | number)[],
+  valueList: number[],
+  title: string
+): echarts.EChartsOption => ({
   backgroundColor: "",
   title: {
-    text: "Зарегистрированные пользователи в месяцах",
+    text: title,
     left: "center",
   },
   tooltip: {
@@ -67,7 +65,7 @@ const option: echarts.EChartsOption = {
       },
     },
   ],
-};
+});
 
 let dataAxis = [2019, 2020, 2021, 2022, 2023, 2024];
 
@@ -77,10 +75,10 @@ let dataShadow = [];
 for (let i = 0; i < dataYear.length; i++) {
   dataShadow.push(yMax);
 }
-const yearlyOption: echarts.EChartsOption = {
+const getYearlyOption = (title: string): echarts.EChartsOption => ({
   backgroundColor: "",
   title: {
-    text: "Зарегистрированные пользователи в годах",
+    text: title,
     left: "center",
   },
   tooltip: {
@@ -137,15 +135,32 @@ const yearlyOption: echarts.EChartsOption = {
       data: dataYear,
     },
   ],
-};
+});
 
 export const StatisticsUsers = () => {
   const [dark] = useLocalStorage("dark", true);
+  const [lang] = useLocalStorage("lang", "ru");
+  const { t } = useTranslation();
+
+  const yearlyOption = getYearlyOption(t("statistics.users.yearly"));
+
+  const newData = data.map(([date, value]) => {
+    dayjs.locale(lang === "uz" ? "uz-latn" : lang);
+    const monthName = dayjs(date).format("MMMM"); // 'MMMM' gives the full month name
+    return [monthName, value];
+  });
+
+  const dateList = newData.map(function (item) {
+    return item[0];
+  });
+  const valueList = newData.map(function (item) {
+    return +item[1] * 1000;
+  });
+  const option = getOption(dateList, valueList, t("statistics.users.monthly"));
+
   return (
     <div className="p-4">
-      <Title className="mb-16">
-        Количество зарегистрированных пользователей
-      </Title>
+      <Title className="mb-16">{t("statistics.users.title")}</Title>
       <div className="flex gap-10">
         <ReactEcharts
           theme={dark ? "dark" : ""}
