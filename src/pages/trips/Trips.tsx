@@ -232,7 +232,7 @@ export const Trips = () => {
 
             legend: {},
             tooltip: {
-              trigger: chartType === "bar" ? "item" : "axis",
+              trigger: "axis",
               axisPointer: {},
               order: "valueDesc",
               showContent: true,

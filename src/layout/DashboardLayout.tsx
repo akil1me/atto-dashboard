@@ -10,7 +10,7 @@ import "./RootLayout.scss";
 export const DashboardLayout = () => {
   const [dark, setDark] = useLocalStorage("dark", true);
 
-  const [expanded, setExpanded] = useLocalStorage("expanded", true);
+  const [expanded] = useLocalStorage("expanded", true);
   // const [] =st
 
   useEffect(() => {
@@ -24,13 +24,12 @@ export const DashboardLayout = () => {
   return (
     <div className="flex">
       <SidebarTest />
-
       <main
-        className={`mt-1 mb-4 transition-all duration-500 w-full relative ${
+        className={`mt-1 mb-4 transition-all duration-500 w-full  relative ${
           expanded ? "ml-[18rem]" : "ml-[4.3rem]"
         }`}
       >
-        <div className="text-2xl pb-2 px-4  flex items-center justify-between w-full sticky backdrop-blur top-0 z-40">
+        <div className="sticky top-0 z-40 flex items-center justify-between w-full px-4 pb-2 text-2xl backdrop-blur">
           <div
             className={`flex items-center  transition-all ${
               expanded ? "gap-0" : "gap-4"
@@ -47,7 +46,7 @@ export const DashboardLayout = () => {
               value={dark}
               checkedChildren={<i className="fa-solid fa-moon"></i>}
               unCheckedChildren={
-                <i className="fa-solid fa-sun text-yellow-300"></i>
+                <i className="text-yellow-300 fa-solid fa-sun"></i>
               }
               onChange={(e) => setDark(e)}
               defaultChecked

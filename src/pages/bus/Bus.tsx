@@ -1,183 +1,44 @@
-import { Segmented } from "antd";
+import { Segmented, Select } from "antd";
 import { SegmentedValue } from "antd/es/segmented";
-import { EChartsOption } from "echarts";
 import ReactEcharts from "echarts-for-react";
-import { useMemo, useRef, useState } from "react";
-import { Title } from "../../components";
-import { useChangeColor } from "../../hooks";
-import { busData } from "../../json";
 import { BarChart, Network } from "lucide-react";
-import { SegmentedCount } from "../../components/ui/segmented-count";
+import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-const dataChanger = (val: "amount" | "count") => {
-  return busData.bus.children.map((item) => {
-    return {
-      name: item.name,
-      children: item.children.map((child) => {
-        return {
-          name: child.name,
-          children: child.children.map((child2) => {
-            return {
-              name: child2.name,
-              value: val === "amount" ? child2.paidAmount : child2.paidCount,
-            };
-          }),
-        };
-      }),
-    };
-  });
-};
-// console.log(busData.bus.children.map((item) => item.name));
+import { DateRange, Title } from "../../components";
+import { SegmentedCount } from "../../components/ui/segmented-count";
+import { useChangeColor } from "../../hooks";
+import { dataChanger, getBarOpts, getTreeOpts } from "./bus-opts";
 
 export const StatisticsBus = () => {
   const echartsRef = useRef<ReactEcharts | null>(null);
   const [segment, setSegment] = useState<"count" | "amount">("count");
   const [chartType, setChartType] = useState<"tree" | "bar">("tree");
   const { t } = useTranslation();
+  const [parkValue, setParkValue] = useState<string>();
+  const [routeValue, setRouteValue] = useState<string | null>();
+  const [busValue, setBusValue] = useState<string | null>();
   const treeColor = useChangeColor();
+  const selectOpts = dataChanger(segment);
 
-  const handleChange = (values: SegmentedValue) => {
-    const val = values as "count" | "amount";
-    setSegment(val);
-    // if (echartsRef.current) {
-    //   const chart = echartsRef.current.getEchartsInstance();
+  const barOpts = getBarOpts(segment);
 
-    //   chart.setOption({
-    //     series: [
-    //       {
-    //         data: dataChanger(val),
-    //       },
-    //     ],
-    //   } as EChartsOption);
-    // }
+  const opts = getTreeOpts(segment, treeColor);
+
+  const handleChangeParkValue = (value: string) => {
+    setParkValue(value);
+    setBusValue(null);
+    setRouteValue(null);
   };
 
-  const barOpts = {
-    backgroundColor: "transparent",
-    tooltip: {
-      show: true,
-      trigger: "axis",
-      axisPointer: {
-        type: "shadow",
-      },
-    },
-
-    xAxis: [
-      {
-        type: "value",
-        show: true,
-      },
-    ],
-    yAxis: [
-      {
-        type: "category",
-        show: true,
-        axisLabel: {
-          show: true,
-          fontSize: 11,
-        },
-        axisTick: { show: false },
-
-        data: busData.bus.children.map((item) => item.name),
-      },
-    ],
-
-    universalTransition: true,
-
-    series: [
-      {
-        id: "treebar",
-        type: "bar",
-        name: busData.bus.children.map((item) => item.name),
-        showBackground: true,
-        data: busData.bus.children.map((item) =>
-          segment === "count" ? item.paidCount : item.paidAmount
-        ),
-        universalTransition: true,
-        animationDelay: function (idx) {
-          return idx * 10;
-        },
-        animationDelayUpdate: function (idx) {
-          return idx * 5;
-        },
-        itemStyle: {
-          borderRadius: [0, 20, 20, 0],
-        },
-      },
-    ],
-    animationEasing: "elasticOut",
-
-    animationDelayUpdate: function (idx) {
-      return idx * 5;
-    },
-  } as EChartsOption;
-
-  const opts = {
-    backgroundColor: "transparent",
-
-    tooltip: {},
-    legend: {
-      show: true,
-      data: ["232", "23432"],
-      selectedMode: "single",
-      top: 55,
-      itemGap: 5,
-      borderRadius: 5,
-    },
-    universalTransition: true,
-    series: [
-      {
-        name: "Автобус",
-        id: "treebar",
-        type: "treemap",
-        roam: false,
-        zoomToNodeRatio: 1.2,
-        zoom: 10,
-        data: dataChanger(segment),
-        universalTransition: true,
-        leafDepth: 1,
-        levels: [
-          {
-            itemStyle: {
-              borderColor: treeColor,
-              borderWidth: 2,
-              borderRadius: 7,
-              gapWidth: 2,
-            },
-          },
-          {
-            colorSaturation: [0.3, 0.6],
-            itemStyle: {
-              borderColorSaturation: 0.7,
-              gapWidth: 2,
-              borderRadius: 7,
-
-              borderWidth: 2,
-            },
-          },
-          {
-            colorSaturation: [0.3, 0.5],
-            itemStyle: {
-              borderColorSaturation: 0.6,
-              borderRadius: 7,
-
-              gapWidth: 1,
-            },
-          },
-          {
-            colorSaturation: [0.3, 0.5],
-          },
-        ],
-      },
-    ],
-  } as EChartsOption;
+  const handleChangeRouteValue = (value: string) => {
+    setRouteValue(value);
+    setBusValue(null);
+  };
 
   const handleChangeChart = (e: SegmentedValue) => {
     setChartType(e as "tree" | "bar");
   };
-
-  const option: echarts.EChartsOption = useMemo(
+  const option = useMemo(
     () => (chartType === "tree" ? opts : barOpts),
     [chartType, segment]
   );
@@ -210,8 +71,54 @@ export const StatisticsBus = () => {
               },
             ]}
           />
-
           <SegmentedCount setSegment={setSegment} />
+          <DateRange
+            showFilter
+            filters={
+              <div className="flex flex-col items-center gap-4">
+                <Select
+                  showSearch
+                  value={parkValue}
+                  onChange={handleChangeParkValue}
+                  className="w-full"
+                  options={selectOpts.map((opt) => {
+                    return { label: opt.name, value: opt.name };
+                  })}
+                  placeholder="Avtosaroy tanlang"
+                />
+
+                <Select
+                  showSearch
+                  value={routeValue}
+                  onChange={handleChangeRouteValue}
+                  className="w-full"
+                  disabled={!parkValue}
+                  options={[...selectOpts]
+                    .sort()
+                    .find((opt) => opt.name === parkValue)
+                    ?.children.map((route) => {
+                      return { label: route.name, value: route.name };
+                    })}
+                  placeholder="Mashrutni tanlang"
+                />
+
+                <Select
+                  showSearch
+                  className="w-full"
+                  value={busValue}
+                  onChange={(value) => setBusValue(value)}
+                  disabled={!parkValue || !routeValue}
+                  options={selectOpts
+                    .find((opt) => opt.name === parkValue)
+                    ?.children.find((route) => route.name === routeValue)
+                    ?.children.map((bus) => {
+                      return { label: bus.name, value: bus.name };
+                    })}
+                  placeholder="Abtobusni tanlang"
+                />
+              </div>
+            }
+          />
         </div>
       </div>
       <ReactEcharts

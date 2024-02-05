@@ -11,8 +11,6 @@ interface dataTypes {
   value: number;
 }
 
-console.log(geoJson.features.map((f) => f.properties.name));
-
 const data = geoJson.features.map((f) => {
   return {
     name: f.properties.name,
